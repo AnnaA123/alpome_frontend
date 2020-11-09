@@ -1,4 +1,4 @@
-Frontend for alpome app. The project will most likely be continued more on the backend side, this is just for saving files.
+Frontend for alpome app. The project will most likely be continued more on the backend side, this is just for personal backup.
 Backend can be found at https://github.com/pokumars/alpome_backend
 
 
