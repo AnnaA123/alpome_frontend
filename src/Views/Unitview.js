@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/layout/Header';
 import UnitContent from '../components/content/UnitContent';
+import CheckToken from '../components/content/CheckToken';
 
 //the page of info abt a specific unit by id
 
@@ -11,8 +12,9 @@ import UnitContent from '../components/content/UnitContent';
 
     return (
         <div>
+            <CheckToken />
             <Header previous='' />
-            <UnitContent units={props.units} />
+            <UnitContent units={props.units} {...props} />
         </div>
     )
 }

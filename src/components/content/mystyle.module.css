@@ -103,6 +103,12 @@
   margin: 12px;
 }
 
+.errorText {
+  font-size: medium;
+  margin: 12px;
+  color: #cc0000;
+}
+
 
 .buttonStyle {
   text-align: center;
@@ -142,6 +148,11 @@
   flex-direction: row;
 }
 
+.topImg {
+  height: 200px;
+  width: 100%;
+}
+
 /* header styles*/
 
 .headerStyle {
@@ -155,4 +166,6 @@
   justify-Content: space-between;
   align-items: center;
 }
+
+
 

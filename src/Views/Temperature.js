@@ -1,12 +1,14 @@
 import React from 'react'
-import StatsTemp from '../components/content/StatsTemp';
+import StatsTemp from '../components/content/stats/StatsTemp';
 import Header from '../components/layout/Header';
+import CheckToken from '../components/content/CheckToken';
 
 
  function Temperature() {
     return (
         <div>
-            <Header previous='unit/1' />
+            <CheckToken />
+            <Header />
             <StatsTemp />
         </div>
     )

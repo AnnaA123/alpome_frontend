@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './mystyle.module.css'; 
+import { register } from '../util/UsersAPI';
 
 //used in Signup.js
 
@@ -8,10 +9,13 @@ class SignUpForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            suUsername: '',
-            suEmail: '',
-            suPw1: '',
-            suPw: '',
+            user: {
+                username: '',
+                email: '',
+                password: '',
+                checkPw: '',
+            },
+            errorMessage: '',
         };
         
         this.handleChange = this.handleChange.bind(this);
@@ -19,14 +23,41 @@ class SignUpForm extends React.Component {
     }
     
     handleChange(event) {   
-        let nam = event.target.name;
+        /*let nam = event.target.name;
         let val = event.target.value;
         
-        this.setState({[nam]: val});  
+        this.setState({[nam]: val});  */
+
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState((prevState) => ({
+            user: {
+                ...prevState.user,
+                [name]: value,
+            },
+        }));
     }
-    handleSubmit(event) {
-        console.log('username: ' + this.state.suUsername + ' and email: ' + this.state.suEmail);
+
+    //sends submit info to UsersAPI.js to register, if it doesnt work, adds an error message to the page
+    handleSubmit = (event) => {
         event.preventDefault();
+
+        if (this.state.user.password === this.state.user.checkPw) {
+            const user = {...this.state.user};
+            delete user.checkPw;
+
+            register(user).then(user => {
+                console.log('user (from signup): ' + JSON.stringify(user));
+                if (user.error !== undefined) {
+                    this.setState({ errorMessage: 'Cannot signup. Username, password or email needs to be changed.' })
+                }
+            });
+        } else {
+            this.setState({ errorMessage: 'Passwords do not match.' })
+        }
+        
     }
 
     render () {
@@ -36,27 +67,31 @@ class SignUpForm extends React.Component {
                     <label>Username</label>
                     <input 
                         type="text" 
-                        name="suUsername" 
-                        value={this.state.suUsername} 
+                        name="username" 
+                        value={this.state.username} 
                         onChange={this.handleChange} />
                     <label>Email Address</label>
                     <input 
                         type="text" 
-                        name="suEmail"
-                        value={this.state.suEmail} 
+                        name="email"
+                        value={this.state.email} 
                         onChange={this.handleChange} />
                     <label>Password</label>
                     <input 
                         type="password" 
-                        name="suPw1" 
-                        value={this.state.suPw1} 
+                        name="password" 
+                        value={this.state.password} 
                         onChange={this.handleChange} />
                     <label>Password</label>
                     <input 
                         type="password" 
-                        name="suPw2" 
-                        value={this.state.suPw} 
+                        name="checkPw" 
+                        value={this.state.checkPw} 
                         onChange={this.handleChange} />
+
+                    <div>
+                        <p className={styles.errorText}>{this.state.errorMessage}</p>
+                    </div>
 
                     <div className={styles.bottomText}>
                         <p>Already have an account?</p>

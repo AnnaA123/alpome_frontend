@@ -24,7 +24,10 @@ import { Link } from 'react-router-dom';
                     <Link to='/settings' style={navList} onClick={() => setShowMenu(false)}>Settings</Link>
                 </li>
                 <li>
-                    <Link to='/login' style={navList} onClick={() => setShowMenu(false)}>Log Out</Link>
+                    <Link to='/login' style={navList} onClick={() => {
+                        setShowMenu(false);
+                        localStorage.clear();
+                    }}>Log Out</Link>
                 </li>
             </ul>
         </div>
@@ -36,7 +39,7 @@ import { Link } from 'react-router-dom';
     return (
         <nav>
             <span style={white} onClick={() => setShowMenu(!showMenu)}>
-                <img src='' alt='NAV'/>
+                <ion-icon name="menu"></ion-icon>
             </span>
 
             { navMenuMask }
@@ -49,6 +52,7 @@ import { Link } from 'react-router-dom';
 }
 
 //STYLING
+
 
 const navStyle = {
     position: 'fixed',
@@ -91,6 +95,10 @@ const maskStyle = {
 
 const white = {
     color: '#fff',
+    fontSize: '46px',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    lineHeight: 'normal',
 }
 
 export default Navigation;

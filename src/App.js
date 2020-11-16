@@ -11,48 +11,35 @@ import Temperature from './Views/Temperature';
 import Addnew from './Views/Addnew';
 import Settings from './Views/Settings';
 
+//test
+import TestPage from './components/content/TestPage';
+
 
 class App extends React.Component {
-  state = {
-    units: [
-        {
-            unit_id: 1,
-            nickname: 'Unit 1',
-            location: 'Kitchen',
-            supragarden: true,
-            last_watered: null,
-            watering_frequency: 3,
-            name: 'what',
-            data_source: 'abc123',
-            plants: 1,
-            owner: 1,
-            shared_access: 1,
-            stream_url: '123abc',
-            images: [
-                {
-                    image_url: '../Views/flowerspic.jpg',
-                    date_uploaded: 2020-11-1,
-                },
-            ],
-        },
-        {
-           unit_id: 2,
-           nickname: 'Unit 2',
-           location: 'Kerava',
-           supragarden: false,
-           last_watered: 2020-7-1,
-           watering_frequency: 15,
-           name: 'what',
-           data_source: 'abc123',
-           plants: 1,
-           owner: 1,
-           shared_access: 1,
-           stream_url: '123abc',
-           images: [],
-       }
-    ]
-}
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null,
+      units: []
+    }
+    this.handleClick = this.handleClick.bind(this);
+  }
+  
 
+  // set the user in the state
+  setUser = (user) => {
+    this.setState({ user });
+    console.log('setuser state', this.state.user);
+    
+  }
+
+
+  //test
+  handleClick(event) {
+    event.preventDefault();
+    console.log(this.state);
+    console.log('users id: ' + this.state.user.user_id);
+}
   
   render () {
     return (
@@ -62,20 +49,39 @@ class App extends React.Component {
           
           
   
-          <Router>
+          <Router basename='/alpome'>
   
             <Switch>
-              <Route exact path='/' ><Home units={this.state.units} /></Route>
-              <Route path='/about'><About /></Route>
-              <Route path='/login'><Login /></Route>
-              <Route path='/signup'><Signup /></Route>
-              <Route exact path='/unit/:unitid'><Unitview units={this.state.units} /></Route>
-              <Route path='/unit/temperature/1'><Temperature units={this.state.units} /></Route>
-              <Route path='/addnew'><Addnew /></Route>
-              <Route path='/settings'><Settings /></Route>
+              <Route exact path='/' render={(props) => (
+                <Home {...props} user={this.state.user} units={this.state.units} />
+              )}></Route>
+              <Route path='/about' render={(props) => (
+                <About {...props} />
+              )}></Route>
+              <Route path='/login' render={(props) => (
+                <Login {...props} state={this.state} setUser={this.setUser} />
+              )}></Route>
+              <Route path='/signup' render={(props) => (
+                <Signup {...props} />
+              )}></Route>
+              <Route exact path='/unit/:unitid' render={(props) => (
+                <Unitview {...props} user={this.state.user} />
+              )}></Route>
+              <Route path='/unit/temperature/:id' render={(props) => (
+                <Temperature {...props} units={this.state.units} />
+              )}></Route>
+              <Route path='/addnew' render={(props) => (
+                <Addnew {...props} />
+              )}></Route>
+              <Route path='/settings' render={(props) => (
+                <Settings {...props} />
+              )}></Route>
+
+              <Route path='/test8437586490743385891029748' render={(props) => (
+                <TestPage {...props} />
+              )}></Route>
   
             </Switch>
-  
             
           </Router>
   
