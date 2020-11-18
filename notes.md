@@ -5,7 +5,10 @@ but did not include any files using yarn, so downloading packages can be a bit o
 
 The packages needed (for now) are:
 
-<h3>react-router-dom</h3>
+<ul>
+  <li>node_modules</li>
+  <li>react-router-dom</li>
+</ul>
 
 (I'll update later if any more are added)
 
