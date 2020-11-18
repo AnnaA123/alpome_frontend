@@ -1,7 +1,7 @@
 
 
 I used yarn as the package manager (while the backend uses npm), 
-but did not include any files using yarn, so downloading packages can be a small hassle.
+but did not include any files using yarn, so downloading packages can be a bit of a hassle.
 
 The packages needed (for now) are:
 
