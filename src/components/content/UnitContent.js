@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styles from './mystyle.module.css'; 
 import { getSingleUnit } from '../util/GrowingUnitsAPI';
-import { getAllData } from '../util/supragardenAPI';
+import { getDayData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
 
 //the content for Unitview.js
@@ -19,28 +19,41 @@ import CheckTemp from './CheckData';
         this.handleClick = this.handleClick.bind(this);
     }
 
-    //gets unit info from the alpome db
+    //gets unit info from the alpome db and saves it to the state
     getUnit(id) {
         getSingleUnit(id).then(unit => {
             this.setState({
               unit
-            }, () => {
-              console.log('done!!! ');
             });
           });
      }
 
+     // get the date for getDayData()
+     getToday() {
+        const timeNow = new Date();
+        const dateNow = timeNow.getFullYear() + '-' + (timeNow.getMonth() + 1) + '-' + timeNow.getDate();
+        console.log('current date: ' + dateNow);
+        return dateNow;
+    }
+
      //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
      getSupragarden() {
-         getAllData().then(stats => {
+         getDayData(this.getToday()).then(stats => {
              this.setState({
                  data: stats[0].data,
                  loading: false,
-             }, () => {
-                 console.log('toimiiko tää????? ' + JSON.stringify(this.state.data));
              });
          });
      }
+     
+     // gets the units id from the url (then go to getUnit())
+     getUnitId() {
+        const located = window.location.href;
+        const divided = located.split('/');
+        const theId = divided[divided.length -1] 
+        return theId;
+    }
+
 /*
     useEffect(() => {
         fetchUnit();
@@ -66,9 +79,9 @@ import CheckTemp from './CheckData';
      //test
      handleClick(event) {
         event.preventDefault();
-        
-        
+        console.log('today: ' + this.getToday());
 
+        console.log('window.location.href ' + window.location.href);
         console.log('HERE ARE THE CURRENT PROPS ' + JSON.stringify(this.props));
         console.log('AND HERE IS THE ID ' + JSON.stringify(this.props.match.params.unitid));
         console.log('image url: ' + JSON.stringify(this.state.unit.images));
@@ -76,12 +89,14 @@ import CheckTemp from './CheckData';
     }
 
     componentDidMount() {
-        const unitId = this.props.match.params.unitid;
+        const unitId = this.getUnitId();
         
-        this.getUnit(this.props.match.params.unitid);
+        this.getUnit(unitId);
         this.getSupragarden();
         
     }
+
+    // TEST BUTTON: <button onClick={this.handleClick}>test</button>
 
     render () {
         if (this.state.unit.supragarden === true) {
@@ -99,7 +114,8 @@ import CheckTemp from './CheckData';
                         }} alt='No image' className={styles.topImg} />
     
                         <h1>{this.state.unit.nickname}</h1>
-                        <Link to='/unit/temperature/1'>
+                        <button onClick={this.handleClick}>test</button>
+                        <Link to={`/unit/temperature/${this.state.unit.unit_id}`} unitId={this.state.unit.unit_id}>
                             <div className={ styles.boxstyle3 }>
                                 <CheckTemp current={this.state.data.temp} min='22' max='30' />
                                 
@@ -187,7 +203,6 @@ import CheckTemp from './CheckData';
                                 
                             </div>
                         </Link>
-                        <button onClick={this.handleClick}>click me</button>
                     </div>
                 )
             }
@@ -204,13 +219,11 @@ import CheckTemp from './CheckData';
                     }} alt='No image' className={styles.topImg} />
                     <h1>{this.state.unit.nickname}</h1>
                     <div className={ styles.boxstyle3 }>
-                        <img src='' alt='mood' className={ styles.iconStyle }/>
                         <div>
-                            <p>asdfg</p>
-                            <p className={ styles.smallText }>idk</p>
+                            <p>Information</p>
+                            <p className={ styles.smallText }>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                         </div>
                     </div>
-                    <button onClick={this.handleClick}>click me</button>
                 </div>
             )
         }

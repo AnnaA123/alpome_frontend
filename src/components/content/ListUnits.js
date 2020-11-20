@@ -36,12 +36,9 @@ used in Home.js*/
     }*/
 
     getUnits(id) {
-         
         getSingleUser(id).then(user => {
             this.setState({
               units: user.own_units,
-            }, () => {
-              console.log('units listed');
             });
           });
      }
@@ -58,17 +55,15 @@ used in Home.js*/
 
     componentDidMount() {
         const userId = localStorage.getItem('currentUser');
-        
-
         this.getUnits(userId);
     }
 
     //first checks if there are units, then lists them
 
     render (){
-        if (this.state.units) {
+        if (this.state.units !== null) {
             return this.state.units.map((unit) => {
-                return <Link to={`/unit/${unit.unit_id}`} unitId={unit.unit_id}> 
+                return <Link to={`/unit/${unit.unit_id}`} key={unit.unit_id}> 
                 <div className={ styles.boxstyle }>
                     <img src='' alt='img' className={ styles.iconStyle } />
                     <p>{ unit.nickname }</p>
@@ -77,7 +72,6 @@ used in Home.js*/
             });
         } else {
             return <div className={ styles.boxstyle }><p>No units</p></div>
-            
         }
         
     }

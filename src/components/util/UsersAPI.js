@@ -9,7 +9,6 @@ const getSingleUser = (id) => {
 
 //add a new user at SignUpForm.js
 const register = (user) => {
-    console.log('user is here: ' + JSON.stringify(user));
     const settings = {
         method: 'POST',
         headers: {
@@ -18,7 +17,6 @@ const register = (user) => {
         body: JSON.stringify(user),
     };
     return fetch(apiUrl, settings).then(response => {
-        
         return response.json();
     })
 }

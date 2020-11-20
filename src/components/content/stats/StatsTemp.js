@@ -1,7 +1,7 @@
 import React from 'react';
 import checkTemp from '../CheckData';
 import { getSingleUnit } from '../../util/GrowingUnitsAPI';
-import { getAllData } from '../../util/supragardenAPI';
+import { getDayData } from '../../util/supragardenAPI';
 import styles from '../mystyle.module.css'; 
 
 
@@ -12,36 +12,56 @@ import styles from '../mystyle.module.css';
             unit: '',
             data: [],
             loading: true,
+            type: '',
         }
+        this.getUnit = this.getUnit.bind(this);
         
     }
 
     //gets unit info from the alpome db
     getUnit(id) {
+        console.log('props.unitid: ' + id);
         getSingleUnit(id).then(unit => {
             this.setState({
               unit
-            }, () => {
-              console.log('done!!! ');
             });
           });
      }
 
+     // get the date for getDayData()
+     getToday() {
+        const timeNow = new Date();
+        const dateNow = timeNow.getFullYear() + '-' + (timeNow.getMonth() + 1) + '-' + timeNow.getDate();
+        return dateNow;
+    }
+
      //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
      getSupragarden() {
-        getAllData().then(stats => {
+        getDayData(this.getToday()).then(stats => {
             this.setState({
                 data: stats[0].data,
                 loading: false,
-            }, () => {
-                console.log('toimiiko tää????? ' + JSON.stringify(this.state.data));
             });
         });
     }
 
-     componentDidMount() {
-         this.getSupragarden();
+    getUnitId() {
+        const located = window.location.href;
+        const divided = located.split('/');
+        const theId = divided[divided.length -1];
+        return theId;
+    }
 
+    /*getUnitId() {
+        console.log('window location href ' + window.location.href) 
+    }*/
+
+     componentDidMount() {
+         // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         const unitId = this.getUnitId();
+
+         this.getUnit(unitId);
+         this.getSupragarden();
      }
 
     render () {
@@ -50,7 +70,7 @@ import styles from '../mystyle.module.css';
         } else {
             return (
                 <div className={ styles.contain }>
-                    <h1>Unit</h1>
+                    <h1>{this.state.unit.nickname}</h1>
                     <div className={ styles.boxstyle }>
                         Temperature
                     </div>
@@ -61,7 +81,7 @@ import styles from '../mystyle.module.css';
                         </div>
                         <div className={ styles.boxstyle4 }>
                             <p>Goal</p>
-                            <p className={ styles.smallText }>25C</p>
+                            <p className={ styles.smallText }>25 C</p>
                         </div>
                     </div>
                     <p>graph</p>
@@ -69,9 +89,7 @@ import styles from '../mystyle.module.css';
                 </div>
             )
         }
-        
     }
-    
 }
 
 export default StatsTemp;

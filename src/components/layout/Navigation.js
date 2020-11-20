@@ -96,7 +96,7 @@ const maskStyle = {
 const white = {
     color: '#fff',
     fontSize: '46px',
-    display: 'inline-block',
+    display: 'flex',
     verticalAlign: 'middle',
     lineHeight: 'normal',
 }

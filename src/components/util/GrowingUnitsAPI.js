@@ -6,8 +6,24 @@ const getSingleUnit = (unitId) => {
     })
 }
 
+// add a new unit. used in AddUnit.js
+// NOT WORKING
+const addNewUnit = (data, token) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'token': token,
+    },
+    body: JSON.stringify(data),
+  };
+  return fetch(apiUrl, options).then(response => {
+    return response.json();
+  })
+}
+
 const uploadImg = (data, token, unitId)=>{
-    const options ={
+    const options = {
       method: 'POST',
       body: data,
       headers:{
@@ -19,4 +35,4 @@ const uploadImg = (data, token, unitId)=>{
     });
   };
 
-export { getSingleUnit, uploadImg };
+export { getSingleUnit, addNewUnit, uploadImg };

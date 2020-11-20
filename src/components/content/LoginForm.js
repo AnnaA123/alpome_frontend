@@ -29,14 +29,12 @@ class LoginForm extends React.Component {
     doLogin = () => {
         login(this.state.user.username, this.state.user.password).then(response => {
             if (response.user !== undefined) {
-                console.log('doLogin response yes');
                 const userIsSet = this.props.setUser(response.user);
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('currentUser', response.user.user_id);
                 this.props.history.push('/');
                 return userIsSet;
             } else {
-                console.log('lol no');
                 this.setState({errorMessage: 'Username or password is incorrect.'});
             }
         }).catch((err) => {

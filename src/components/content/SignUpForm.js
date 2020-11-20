@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import styles from './mystyle.module.css'; 
 import { register } from '../util/UsersAPI';
 
@@ -49,9 +49,10 @@ class SignUpForm extends React.Component {
             delete user.checkPw;
 
             register(user).then(user => {
-                console.log('user (from signup): ' + JSON.stringify(user));
                 if (user.error !== undefined) {
                     this.setState({ errorMessage: 'Cannot signup. Username, password or email needs to be changed.' })
+                } else {
+                    this.props.history.push('/login');
                 }
             });
         } else {
@@ -104,4 +105,4 @@ class SignUpForm extends React.Component {
     }
 }
 
-export default SignUpForm;
+export default withRouter(SignUpForm);

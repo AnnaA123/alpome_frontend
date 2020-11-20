@@ -8,4 +8,16 @@ const getAllData = () => {
     })
 }
 
-export { getAllData };
+const getDayData = (date) => {
+    const options = {
+        method: 'GET',
+        params: {
+            _limit: 3
+        },
+      };
+    return fetch(apiUrl + '/datetime/' + date, options).then(response => {
+        return response.json();;
+    })
+}
+
+export { getAllData, getDayData };
