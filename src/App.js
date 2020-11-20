@@ -13,6 +13,7 @@ import Settings from './Views/Settings';
 
 //test
 import TestPage from './components/content/TestPage';
+import Graph from './Views/Graph';
 
 
 class App extends React.Component {
@@ -72,6 +73,9 @@ class App extends React.Component {
               )}></Route>
               <Route path='/addnew' render={(props) => (
                 <Addnew {...props} />
+              )}></Route>
+              <Route path='/graph' render={(props) => (
+                <Graph {...props} />
               )}></Route>
               <Route path='/settings' render={(props) => (
                 <Settings {...props} />
