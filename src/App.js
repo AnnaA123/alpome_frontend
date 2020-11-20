@@ -7,7 +7,7 @@ import About from './Views/About';
 import Login from './Views/Login';
 import Signup from './Views/Signup';
 import Unitview from './Views/Unitview';
-import Temperature from './Views/Temperature';
+import Temperature from './Views/StatsViews/Temperature';
 import Addnew from './Views/Addnew';
 import Settings from './Views/Settings';
 
