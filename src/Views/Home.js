@@ -13,7 +13,7 @@ there is also an add units button*/
         <div>
             <CheckToken />
             <Header />
-            <ListUnits units={props.units} />
+            <ListUnits />
 
             <Link to='/addnew'>
                 <div className={ styles.boxstyle2 }>

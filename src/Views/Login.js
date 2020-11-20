@@ -1,6 +1,5 @@
 import React from 'react'
-
-import Header2 from '../components/layout/Header2';
+import Header from '../components/layout/Header';
 import LoginForm from '../components/content/LoginForm'
 import { checkPropTypes } from 'prop-types';
 
@@ -27,7 +26,7 @@ import { checkPropTypes } from 'prop-types';
         return (
             <div>
                 
-                <Header2 />
+                <Header />
                 <LoginForm setUser={this.props.setUser} />
             </div>
         )
