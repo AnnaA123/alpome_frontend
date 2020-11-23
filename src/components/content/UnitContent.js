@@ -5,7 +5,8 @@ import { getSingleUnit } from '../util/GrowingUnitsAPI';
 import { getDayData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
 
-//the content for Unitview.js
+/* the content for Unitview.js 
+NOTE: minmax values are currently hardcoded into the state, and are sent through props to StatsTemp */
 
  class UnitContent extends React.Component{
     constructor(props) {
@@ -14,6 +15,38 @@ import CheckTemp from './CheckData';
             unit: '',
             data: [],
             loading: true,
+            minmax: {
+                temp: {
+                    min: '10',
+                    low: '16',
+                    high: '24',
+                    max: '30'
+                },
+                tempW: {
+                    min: '10',
+                    low: '16',
+                    high: '24',
+                    max: '30'
+                },
+                ph: {
+                    min: '3.5',
+                    low: '5',
+                    high: '6.5',
+                    max: '8'
+                },
+                h: {
+                    min: '50',
+                    low: '70',
+                    high: '90',
+                    max: '110'
+                },
+                ec: {
+                    min: '1',
+                    low: '1.5',
+                    high: '3.5',
+                    max: '4'
+                },
+            }
         }
         
         this.handleClick = this.handleClick.bind(this);
@@ -53,23 +86,7 @@ import CheckTemp from './CheckData';
         const theId = divided[divided.length -1] 
         return theId;
     }
-
-/*
-    useEffect(() => {
-        fetchUnit();
-        console.log(match);
-    }, []); 
-
-    const [unit, setUnit] = useState({});
-
-    const fetchUnit = async () => {
-        const fetchUnit = await fetch(`/unit/${match.units.unit_id}`);
-        const unit = await fetchUnit.json();
-
-        console.log(unit);
-    }
-    */
-
+    
     //posts iimage to unit at GrowingUnitsAPI.js
     handleImgSubmit = (evt) => {
         const fd = new FormData();
@@ -115,92 +132,74 @@ import CheckTemp from './CheckData';
     
                         <h1>{this.state.unit.nickname}</h1>
                         <button onClick={this.handleClick}>test</button>
-                        <Link to={`/unit/temperature/${this.state.unit.unit_id}`} unitId={this.state.unit.unit_id}>
+                        <Link to={{
+                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            propperinos: { type: 'temp', minmax: this.state.minmax.temp }
+                        }} unitId={this.state.unit.unit_id} type='temp'>
                             <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.temp} min='22' max='30' />
+                                <CheckTemp current={this.state.data.temp} 
+                                min={this.state.minmax.temp.min} low={this.state.minmax.temp.low} high={this.state.minmax.temp.high} max={this.state.minmax.temp.max} />
                                 
                                     <div>
-                                        <p>temp</p>
-                                        <p className={ styles.smallText }>{this.state.data.temp}</p>
+                                        <p>Temperature</p>
+                                        <p className={ styles.smallText }>{this.state.data.temp} C</p>
                                     </div>
-                                
                             </div>
                         </Link>
-                        <Link to=''>
+                        <Link to={{
+                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            propperinos: { type: 'tempW', minmax: this.state.minmax.tempW }
+                        }}>
                             <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.tempW} min='18' max='25' />
+                                <CheckTemp current={this.state.data.tempW} 
+                                min={this.state.minmax.tempW.min} low={this.state.minmax.tempW.low} high={this.state.minmax.tempW.high} max={this.state.minmax.tempW.max} />
                                 
                                     <div>
                                         <p>Water Temperature</p>
-                                        <p className={ styles.smallText }>{this.state.data.tempW}</p>
+                                        <p className={ styles.smallText }>{this.state.data.tempW} C</p>
                                     </div>
-                                
                             </div>
                         </Link>
-                        <Link to=''>
+                        <Link to={{
+                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            propperinos: { type: 'ph', minmax: this.state.minmax.ph }
+                        }}>
                             <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.tvoc} min='22' max='30' />
+                                <CheckTemp current={this.state.data.ph} 
+                                min={this.state.minmax.ph.min} low={this.state.minmax.ph.low} high={this.state.minmax.ph.high} max={this.state.minmax.ph.max} />
                                 
                                     <div>
-                                        <p>tvoc</p>
-                                        <p className={ styles.smallText }>{this.state.data.tvoc}</p>
+                                        <p>PH</p>
+                                        <p className={ styles.smallText }>{this.state.data.ph} </p>
                                     </div>
-                                
                             </div>
                         </Link>
-                        <Link to=''>
+                        <Link to={{
+                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            propperinos: { type: 'h', minmax: this.state.minmax.h }
+                        }}>
                             <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.co2} min='22' max='30' />
+                                <CheckTemp current={this.state.data.h} 
+                                min={this.state.minmax.h.min} low={this.state.minmax.h.low} high={this.state.minmax.h.high} max={this.state.minmax.h.max} />
                                 
                                     <div>
-                                        <p>co2</p>
-                                        <p className={ styles.smallText }>{this.state.data.co2}</p>
+                                        <p>Humidity</p>
+                                        <p className={ styles.smallText }>{this.state.data.h} %</p>
                                     </div>
-                                
                             </div>
                         </Link>
-                        <Link to=''>
+                        <Link to={{
+                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            propperinos: { type: 'ec', minmax: this.state.minmax.ec }
+                        }}>
                             <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.ph} min='22' max='30' />
+                                <CheckTemp current={this.state.data.ec} 
+                                min={this.state.minmax.ec.min} low={this.state.minmax.ec.low} high={this.state.minmax.ec.high} max={this.state.minmax.ec.max} />
                                 
                                     <div>
-                                        <p>ph</p>
-                                        <p className={ styles.smallText }>{this.state.data.ph}</p>
+                                        <p>Electronic Conductivity</p>
+                                        <p className={ styles.smallText }>{this.state.data.ec} mS/cm</p>
                                     </div>
-                                
-                            </div>
-                        </Link>
-                        <Link to=''>
-                            <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.h} min='22' max='30' />
-                                
-                                    <div>
-                                        <p>h</p>
-                                        <p className={ styles.smallText }>{this.state.data.h}</p>
-                                    </div>
-                                
-                            </div>
-                        </Link>
-                        <Link to=''>
-                            <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.ec} min='22' max='30' />
-                                
-                                    <div>
-                                        <p>ec</p>
-                                        <p className={ styles.smallText }>{this.state.data.ec}</p>
-                                    </div>
-                                
-                            </div>
-                        </Link>
-                        <Link to=''>
-                            <div className={ styles.boxstyle3 }>
-                                <CheckTemp current={this.state.data.light} min='22' max='30' />
-                                
-                                    <div>
-                                        <p>light</p>
-                                        <p className={ styles.smallText }>{this.state.data.light}</p>
-                                    </div>
-                                
                             </div>
                         </Link>
                     </div>
@@ -227,10 +226,7 @@ import CheckTemp from './CheckData';
                 </div>
             )
         }
-        
     }
-    
-    
 }
 
 export default UnitContent;
