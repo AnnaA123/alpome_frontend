@@ -16,6 +16,7 @@ used in Home.js*/
         super(props);
         this.state = {
             units: [],
+            loading: true,
         }
         
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -39,6 +40,7 @@ used in Home.js*/
         getSingleUser(id).then(user => {
             this.setState({
               units: user.own_units,
+              loading: false,
             });
           });
      }
@@ -61,21 +63,30 @@ used in Home.js*/
     //first checks if there are units, then lists them
 
     render (){
-        if (this.state.units !== null) {
-            return this.state.units.map((unit) => {
-                return <Link to={`/unit/${unit.unit_id}`} key={unit.unit_id}> 
-                <div className={ styles.boxstyle }>
-                    <img src='' alt='img' className={ styles.iconStyle } />
-                    <p>{ unit.nickname }</p>
-                </div>
-                </Link>
-            });
+        if (this.state.loading) {
+            return <div className={ styles.loading }>
+                    <div className={ styles.loadingText }>
+                        <ion-icon name="sync-outline" ></ion-icon>
+                        <p>Loading</p>
+                    </div></div>
         } else {
-            return <div className={ styles.boxstyle }><p>No units</p></div>
+            if (this.state.units[0] !== undefined) {
+                return this.state.units.map((unit) => {
+                    return <Link to={`/unit/${unit.unit_id}`} key={unit.unit_id}> 
+                    <div className={ styles.boxstyle }>
+                        <ion-icon name="flower-outline" className={ styles.iconStyle } ></ion-icon>
+                        <p className={ styles.titleStyle }>{ unit.nickname }</p>
+                    </div>
+                    </Link>
+                });
+            } else {
+                return <div className={ styles.infoBox }>
+                        <h1>Welcome <ion-icon name="happy-outline"></ion-icon></h1>
+                        <p>You don't seem to have any gardening units yet! Create one by pressing the button below.</p>
+                    </div>
+            }
         }
-        
     }
-    
 }
 
 export default ListUnits;

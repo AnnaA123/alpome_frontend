@@ -12,6 +12,12 @@ The packages needed (for now) are:
 
 (I'll update later if any more are added)
 
+Todos:
+<ul>
+  <li>image uploading</li>
+  <li>updating unit or literally anything</li>
+</ul>
+
 ==========================================================================
 
 Some directories

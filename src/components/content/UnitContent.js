@@ -1,9 +1,10 @@
 import React, { useState, useEffect} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styles from './mystyle.module.css'; 
-import { getSingleUnit } from '../util/GrowingUnitsAPI';
+import { getSingleUnit, updateData, uploadImg } from '../util/GrowingUnitsAPI';
 import { getDayData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
+import CheckWatered from './CheckWatered';
 
 /* the content for Unitview.js 
 NOTE: minmax values are currently hardcoded into the state, and are sent through props to StatsTemp */
@@ -14,7 +15,14 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         this.state = {
             unit: '',
             data: [],
+            image: {
+                image_url: '', 
+                date_uploaded: null, 
+                file_name: '',  
+                Key: '',
+              },
             loading: true,
+            shortLoading: true,
             minmax: {
                 temp: {
                     min: '10',
@@ -50,13 +58,17 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         }
         
         this.handleClick = this.handleClick.bind(this);
+        this.handleTimeUpdate = this.handleTimeUpdate.bind(this);
+        this.topImg = this.topImg.bind(this);
+        this.handleImgSubmit = this.handleImgSubmit.bind(this);
     }
 
     //gets unit info from the alpome db and saves it to the state
     getUnit(id) {
         getSingleUnit(id).then(unit => {
             this.setState({
-              unit
+              unit,
+              shortLoading: false,
             });
           });
      }
@@ -65,8 +77,28 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
      getToday() {
         const timeNow = new Date();
         const dateNow = timeNow.getFullYear() + '-' + (timeNow.getMonth() + 1) + '-' + timeNow.getDate();
-        console.log('current date: ' + dateNow);
         return dateNow;
+    }
+
+    // date and time for last_watered
+    getNow() {
+        const timeNow = new Date();
+        const dateNow = timeNow.getTime();
+
+        return dateNow;
+    }
+
+    lastWatered() {
+        const minutes = 1000 * 60;
+        const hours = minutes * 60;
+        const days = hours * 24;
+        const weeks = days * 7;
+        const years = days * 365;
+
+        const lwm = this.getNow() - 1606145477788;
+        //const lwm = this.getNow() - this.state.unit.last_watered;
+        const lwn = Math.round(lwm / days);
+        return lwn;
     }
 
      //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
@@ -87,10 +119,78 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         return theId;
     }
     
-    //posts iimage to unit at GrowingUnitsAPI.js
-    handleImgSubmit = (evt) => {
-        const fd = new FormData();
-        // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //posts image to unit at GrowingUnitsAPI.js
+    handleImgSubmit = (event) => {
+        event.persist();
+        console.log('tried to add img');
+
+        const imgData = event.target.files[0];
+        console.log('event target ' + imgData);
+        //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.setState((prevState) => ({
+            image: {
+                ...prevState.image,
+                file_name: imgData,
+            },
+        }));
+
+        // URL.createObjectURL()
+        console.log('here we are ' + JSON.stringify(this.state.image));
+    }
+
+    handleImgSend = (event) => {
+        event.preventDefault();
+        console.log('here we are ' + JSON.stringify(this.state.image));
+    }
+
+    // the image at the top of the page
+    // not working     value={this.state.image.file_name}
+    topImg = (imgList) => {
+        if (imgList[0] !== undefined){
+            return <div >
+                <img src={imgList.image_url} alt='No image' className={ styles.bigImg } />
+                <form onSubmit={this.handleImgSend} >
+                    <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
+                    <button className={ styles.smallButtonStyle }>Add image</button>
+                </form>
+            </div>
+        } else {
+            return <div className={ styles.bigImg }>
+                <p className={ styles.centerText }></p>
+                <form onSubmit={this.handleImgSend}>
+                    <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
+                    <p>{'\n'}</p>
+                    <button className={ styles.smallButtonStyle }>Add image</button>
+                </form>
+            </div>
+        }
+    }
+
+    // for updating last_watered NOT WORKING
+    handleTimeUpdate(event) {
+        event.preventDefault();
+
+        this.setState((prevState) => ({
+            unit: {
+                ...prevState.unit,
+                last_watered: this.lastWatered(),
+            },
+        }));
+
+        const unit = {...this.state.unit};
+        const unitId = this.getUnitId();
+
+        console.log('unitId: ' + unitId);
+
+        updateData(unit, localStorage.getItem('token'), unitId).then(unit => {
+            console.log('msg from UnitContent: ' + JSON.stringify(unit));
+            console.log(' this is the state ' + JSON.stringify(this.state.unit));
+            if (unit.error !== undefined) {
+                console.log( '(UnitContent.js) Error message: ' + unit.error)
+            } else {
+                console.log( 'It worked.' )
+            }
+        });
     }
 
      //test
@@ -110,7 +210,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         
         this.getUnit(unitId);
         this.getSupragarden();
-        
     }
 
     // TEST BUTTON: <button onClick={this.handleClick}>test</button>
@@ -118,20 +217,16 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     render () {
         if (this.state.unit.supragarden === true) {
             if(this.state.loading) {
-                return <p>Loading...</p>
+                return <div className={ styles.loading }>
+                    <div className={ styles.loadingText }>
+                        <ion-icon name="sync-outline" ></ion-icon>
+                        <p>Loading</p>
+                    </div></div>
             } else {
                 return (
                     <div className={ styles.contain }>
-                        <img src={image => {
-                            if (this.state.unit.images.image_url !== null){
-                                return this.state.unit.images.image_url;
-                            } else {
-                                return '';
-                            }
-                        }} alt='No image' className={styles.topImg} />
-    
+                        <div className={ styles.bigImg }>{this.topImg(this.state.unit.images)}</div>
                         <h1>{this.state.unit.nickname}</h1>
-                        <button onClick={this.handleClick}>test</button>
                         <Link to={{
                             pathname: `/unit/temperature/${this.state.unit.unit_id}`,
                             propperinos: { type: 'temp', minmax: this.state.minmax.temp }
@@ -142,7 +237,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                 
                                     <div>
                                         <p>Temperature</p>
-                                        <p className={ styles.smallText }>{this.state.data.temp} C</p>
+                                        <p className={ styles.smallText }>{this.state.data.temp} °C</p>
                                     </div>
                             </div>
                         </Link>
@@ -156,7 +251,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                 
                                     <div>
                                         <p>Water Temperature</p>
-                                        <p className={ styles.smallText }>{this.state.data.tempW} C</p>
+                                        <p className={ styles.smallText }>{this.state.data.tempW} °C</p>
                                     </div>
                             </div>
                         </Link>
@@ -169,7 +264,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                 min={this.state.minmax.ph.min} low={this.state.minmax.ph.low} high={this.state.minmax.ph.high} max={this.state.minmax.ph.max} />
                                 
                                     <div>
-                                        <p>PH</p>
+                                        <p>pH</p>
                                         <p className={ styles.smallText }>{this.state.data.ph} </p>
                                     </div>
                             </div>
@@ -207,25 +302,33 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             }
             
         } else {
+            if(this.state.shortLoading) {
+                return <div className={ styles.loading }>
+                    <div className={ styles.loadingText }>
+                        <ion-icon name="sync-outline" ></ion-icon>
+                        <p>Loading</p>
+                    </div></div>
+            } else {
             return (
                 <div className={ styles.contain }>
-                    <img src={image => {
-                        if (this.state.unit.images.image_url !== null){
-                            return this.state.unit.images.image_url;
-                        } else {
-                            return '';
-                        }
-                    }} alt='No image' className={styles.topImg} />
+                    <div >{this.topImg(this.state.unit.images)}</div>
                     <h1>{this.state.unit.nickname}</h1>
                     <div className={ styles.boxstyle3 }>
+                        <CheckWatered w_freq={this.state.unit.watering_frequency} today={this.getNow()} last_watered={this.state.unit.last_watered}/>
                         <div>
-                            <p>Information</p>
+                            <p className={ styles.smallText }>Your garden was last watered {this.lastWatered()} days ago. </p>
+                            <button onClick={this.handleTimeUpdate} className={ styles.smallButtonStyle }>Plants watered!</button>
+                            
+                        </div>
+                    </div>
+                    <div className={ styles.boxstyle3 }>
+                        <div>
                             <p className={ styles.smallText }>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                         </div>
                     </div>
                 </div>
             )
-        }
+        }}
     }
 }
 

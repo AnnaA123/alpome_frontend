@@ -17,8 +17,8 @@ there is also an add units button*/
 
             <Link to='/addnew'>
                 <div className={ styles.boxstyle2 }>
-                    <img src='' alt='img' className={ styles.iconStyle } />
-                    <p>Add new unit +</p>
+                    <ion-icon name="add-outline" className={ styles.iconStyle }></ion-icon>
+                    <p className={ styles.titleStyle }>Add new unit +</p>
                 </div></Link>
             
             
