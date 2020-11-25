@@ -1,2 +1,4 @@
 node_modules
 debug.log
+#ignore build since we dont need to upload it to git
+build/*
