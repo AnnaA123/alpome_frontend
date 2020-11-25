@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:3004/api/growing_unit/';
+const apiUrl = '/api/growing_unit/';
 
 const getSingleUnit = (unitId) => {
     return fetch(apiUrl + unitId).then(response => {

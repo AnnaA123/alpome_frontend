@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:3004/api/login/';
+const apiUrl = '/api/login/';
 
 
 // used in LoginForm.js

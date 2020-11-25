@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:3004/api/users/';
+const apiUrl = '/api/users/';
 
 //get info of specific user. used at ListUnits.js
 const getSingleUser = (id) => {
