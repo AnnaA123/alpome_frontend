@@ -28,7 +28,7 @@ const updateData = (data, token, unitId) => {
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
-      'token': token,
+      'Authorization': token,
     },
   };
   return fetch(apiUrl + unitId, options).then(response =>{

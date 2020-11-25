@@ -182,7 +182,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
         console.log('unitId: ' + unitId);
 
-        updateData(unit, localStorage.getItem('token'), unitId).then(unit => {
+        updateData(unit, 'bearer ' + localStorage.getItem('token'), unitId).then(unit => {
             console.log('msg from UnitContent: ' + JSON.stringify(unit));
             console.log(' this is the state ' + JSON.stringify(this.state.unit));
             if (unit.error !== undefined) {

@@ -204,7 +204,7 @@ class AddUnit extends React.Component{
                     Is it a hydroponic system?
                 </label>
                 
-                
+                <p className={styles.errorText}>{this.state.errorMessage}</p>
                 <p>{'\n'}</p>
                 <button type="submit" className={styles.buttonStyle}>Add Unit</button>
             </form>
@@ -227,7 +227,7 @@ class AddUnit extends React.Component{
                     name="location"/>
                 
                 <label>
-                <button onClick={this.handleClick} className={styles.choiceButtonStyle}> <ion-icon name="radio-button-off-outline"></ion-icon></button>
+                <button onClick={this.handleClick} className={styles.choiceButtonStyle}><ion-icon name="radio-button-off-outline"></ion-icon></button>
                     Is it a hydroponic system?
                 </label>
 
@@ -253,6 +253,7 @@ class AddUnit extends React.Component{
                     <option value="months">Months</option>
                 </select>
                 
+                <p className={styles.errorText}>{this.state.errorMessage}</p>
                 <p>{'\n'}</p>
                 <button type="submit" className={styles.buttonStyle}>Add Unit</button>
             </form>
