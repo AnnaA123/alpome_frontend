@@ -1,3 +1,5 @@
+/* changed urls to relative urls and added proxy url to package.json.
+That way in development it uses the proxy and in prduction it uses the parent i.e server*/
 const apiUrl = '/api/users/';
 
 //get info of specific user. used at ListUnits.js
