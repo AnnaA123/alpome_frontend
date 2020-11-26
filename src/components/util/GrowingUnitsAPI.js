@@ -9,7 +9,6 @@ const getSingleUnit = (unitId) => {
 }
 
 // add a new unit. used in AddUnit.js
-// NOT WORKING
 const addNewUnit = (data, token) => {
   const options = {
     method: 'POST',
@@ -24,17 +23,41 @@ const addNewUnit = (data, token) => {
   })
 }
 
+const updateData = (data, token, unitId) => {
+  console.log('GROWINGUNITAPI data here: ' + JSON.stringify(data))
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+  };
+  return fetch(apiUrl + unitId, options).then(response =>{
+    return response.json();
+  });
+}
+
 const uploadImg = (data, token, unitId)=>{
+    console.log('imagedata: ' + data);
     const options = {
       method: 'POST',
       body: data,
       headers:{
-        'token': token,
+        'Authorization': token,
       },
+      processData: false,
+      mimeType: "multipart/form-data",
+      contentType: false,
     };
     return fetch(apiUrl + 'unitimage/' + unitId, options).then(response =>{
-      return response.json();
-    });
+      console.log('heres the response: ' + response);
+      return response;
+    }).then(
+      success => console.log(success) // Handle the success response object
+    ).catch(
+      error => console.log(error) // Handle the error response object
+    );
   };
 
-export { getSingleUnit, addNewUnit, uploadImg };
+export { getSingleUnit, addNewUnit, updateData, uploadImg };
