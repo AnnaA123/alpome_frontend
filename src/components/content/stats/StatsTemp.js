@@ -1,8 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'
 import CheckTemp from '../CheckData';
+import LineChart from '../LineChart';
+import { graphDataType } from '../../util/globals';
 import { getSingleUnit } from '../../util/GrowingUnitsAPI';
-import { getDayData } from '../../util/supragardenAPI';
+import { getDayData, getAllData } from '../../util/supragardenAPI';
 import styles from '../mystyle.module.css'; 
 
 
@@ -21,8 +23,9 @@ import styles from '../mystyle.module.css';
                 min: '',
                 low: '',
                 high: '',
-                max: ''
+                max: '',
             },
+            readings: [],
         }
         this.getUnit = this.getUnit.bind(this);
         this.getType = this.getType.bind(this);
@@ -87,20 +90,20 @@ import styles from '../mystyle.module.css';
         if(currentType === 'temp') {
             this.setState({
                 title: 'Temperature',
-                xyz: 'C',
+                xyz: '°C',
                 goal: '20',
                 minmax: currentMinMax,
             })
         } else if (currentType === 'tempW') {
             this.setState({
                 title: 'Water Temperature',
-                xyz: 'C',
+                xyz: '°C',
                 goal: '20',
                 minmax: currentMinMax,
             })
         } else if (currentType === 'ph') {
             this.setState({
-                title: 'PH',
+                title: 'pH',
                 xyz: '',
                 goal: '5,75',
                 minmax: currentMinMax,
@@ -122,6 +125,21 @@ import styles from '../mystyle.module.css';
         }
     }
 
+    setGraphView = () => {
+        const type = this.state.type;
+        if(type === 'temp') {
+            return 'TEMPERATURE';
+        } else if (type === 'tempW') {
+            return 'WATER_TEMPERATURE';
+        } else if (type === 'ph') {
+            return 'PH';
+        } else if (type === 'h') {
+            return 'HUMIDITY';
+        } else if (type === 'ec') {
+            return 'ELECTRICAL_CONDUCTIVITY';
+        }
+    }
+
     //test
     handleClick(event) {
         event.preventDefault();
@@ -130,6 +148,7 @@ import styles from '../mystyle.module.css';
         console.log('täälä propsit: ' + JSON.stringify(this.props.location.propperinos.type));
         console.log('ja täälä statet: ' + this.state.type);
         console.log('title and thing ' + this.state.title + this.state.xyz);
+        console.log('here is the type in caps: ' + this.setGraphView());
 
     }
 
@@ -141,13 +160,18 @@ import styles from '../mystyle.module.css';
          this.getSupragarden();
          this.getType();
          this.setDetails();
+         getAllData().then((data) => this.setState({ readings: data }));
      }
 
      // TEST BUTTON: <button onClick={this.handleClick}>test</button>
 
     render () {
         if(this.state.loading) {
-            return <p>Loading...</p>
+            return <div className={ styles.loading }>
+            <div className={ styles.loadingText }>
+                <ion-icon name="sync-outline" ></ion-icon>
+                <p>Loading</p>
+            </div></div>
         } else {
             return (
                 <div className={ styles.contain }>
@@ -167,7 +191,12 @@ import styles from '../mystyle.module.css';
                             <p className={ styles.smallText }>{this.state.goal} {this.state.xyz}</p>
                         </div>
                     </div>
-                    <p>graph</p>
+                    <div className="App">
+        
+                        <div className="chart" >
+                        <LineChart graphReadings={this.state.readings} parameter={graphDataType[this.setGraphView()]}/>
+                    </div>
+    </div>
         
                 </div>
             )

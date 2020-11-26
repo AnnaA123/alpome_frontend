@@ -44,16 +44,23 @@ function LineChart({graphReadings, parameter}) {
     });
   }
 
+  /*
+  good code, but not necessarily needed?
+  
+  <label htmlFor="graphDataType">Select measurements </label>
 
-  return (
-    <div>
-      <div className="dropdown" >
-        <label htmlFor="graphDataType">Select measurements </label>
+  <div className="dropdown" >
+        
         <select name="graphDataType" data-testid="search-criteria"
           id="graphDataType" onChange={handleGraphDataTypeChange}>
             {renderDropdownOptions()}
         </select>
       </div>
+  */
+
+  return (
+    <div>
+      
       <Line data={data} />
     </div>
   )

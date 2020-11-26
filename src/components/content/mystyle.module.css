@@ -1,9 +1,12 @@
+
+/* UnitContent.js */
 .contain {
   width: 96%;
   max-width: 400px;
   align-items: center;
   margin: auto;
   margin-top: 10px;
+  margin-bottom: 10px;
   font-size: 24px;
   border-radius: 5px;
 }
@@ -44,7 +47,6 @@
 /* UnitContent.js */
 .boxstyle3 {
   display: flex;
-  flex-wrap: wrap;
   text-align: left;
   background: #57C45C;
   color: #000;
@@ -98,6 +100,7 @@
   margin-bottom: 10px;
 }
   
+/* small text under a title */
 .bottomText {
   font-size: medium;
   margin: 12px;
@@ -109,7 +112,7 @@
   color: #cc0000;
 }
 
-
+/* big green buttons */
 .buttonStyle {
   text-align: center;
   background-color: #227D26;
@@ -117,6 +120,31 @@
   color: #fff;
   padding: 12px 30px;
   font-size: large;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+/* smaller buttons */
+.smallButtonStyle {
+  text-align: center;
+  background-color: #227D26;
+  border: none;
+  color: #fff;
+  padding: 6px 16px;
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+/* choice button at AddUnit.js */
+.choiceButtonStyle {
+  text-align: center;
+  background-color: #57C45C;
+  border: none;
+  margin: 6px 10px;
+  font-size: 20px;
   text-decoration: none;
   display: inline-block;
   border-radius: 8px;
@@ -134,9 +162,15 @@
   border-radius: 5px;
 }
 
+/* icons in ListUnits.js (used through CheckData.js) */
 .iconStyle {
   width: 20%;
   margin-right: 10px;
+}
+
+/* titles in ListUnits.js */
+.titleStyle {
+  margin-left: 16px;
 }
 
 .smallText {
@@ -153,8 +187,14 @@
   width: 100%;
 }
 
-/* header styles*/
+.dropDownStyle {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
 
+/* header styles*/
 .headerStyle {
   display: block;
   width: 100%;
@@ -168,4 +208,52 @@
 }
 
 
+/* loading style */
+.loading {
+  text-align: center;
+  background: #57C45C;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  align-items: center;
+  font-size: 20px;
+}
 
+.loadingText {
+  margin: auto;
+  margin-top: 40%;
+}
+
+/* pic of the unit at the top of UnitContent.js  background: #8ab18c; */
+.bigImg {
+  text-align: center;
+  width: 100%;
+  height: 20%;
+  min-height: 200px;
+  max-height: 300px;
+  align-items: center;
+  font-size: 20px;
+  object-fit: cover;
+}
+
+/* small img of unit at the bottom of UnitContent.js */
+.smallImg {
+  width: 110px;
+  height: 110px;
+  margin: 2px;
+  line-height: 75px;
+  font-size: 30px;
+  object-fit: cover;
+}
+
+.picStyle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+  padding-top: 6px;
+}
+
+.centerText {
+  padding-top: 16%;
+}

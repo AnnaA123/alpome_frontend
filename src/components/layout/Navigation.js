@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
          navMenu = 
         <div 
         style={navStyle}>
-            <h1 style={xClose} onClick={() => setShowMenu(false)}>X</h1>
+            <h1 style={xClose} onClick={() => setShowMenu(false)}><ion-icon name="close-outline" style={xStyle}></ion-icon></h1>
             <ul>
                 <li>
                     <Link to='/' style={navList} onClick={() => setShowMenu(false)}>Main</Link>
@@ -52,7 +52,6 @@ import { Link } from 'react-router-dom';
 }
 
 //STYLING
-
 
 const navStyle = {
     position: 'fixed',
@@ -97,6 +96,14 @@ const white = {
     color: '#fff',
     fontSize: '46px',
     display: 'flex',
+    verticalAlign: 'middle',
+    lineHeight: 'normal',
+}
+
+const xStyle = {
+    color: '#fff',
+    fontSize: '46px',
+    
     verticalAlign: 'middle',
     lineHeight: 'normal',
 }
