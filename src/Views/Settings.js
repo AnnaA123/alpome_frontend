@@ -1,4 +1,5 @@
 import React from 'react';
+import ChangeEmail from '../components/content/ChangeEmail';
 import Header from '../components/layout/Header';
 import CheckToken from '../components/content/CheckToken';
 
@@ -8,7 +9,8 @@ import CheckToken from '../components/content/CheckToken';
         <div>
             <CheckToken />
             <Header />
-            <p>Here are the settings</p>
+            <h1>Settings</h1>
+            <ChangeEmail />
         </div>
     )
 }

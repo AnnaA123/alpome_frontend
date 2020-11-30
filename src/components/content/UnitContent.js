@@ -4,6 +4,7 @@ import styles from './mystyle.module.css';
 import { getSingleUnit, updateData, uploadImg } from '../util/GrowingUnitsAPI';
 import { getDayData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
+import ShowImage from './ShowImage';
 import CheckWatered from './CheckWatered';
 
 /* the content for Unitview.js 
@@ -62,6 +63,9 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         this.topImg = this.topImg.bind(this);
         this.handleImgSubmit = this.handleImgSubmit.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.editNotes = this.editNotes.bind(this);
+        this.editingNotes = this.editingNotes.bind(this);
+        this.saveNotes = this.saveNotes.bind(this);
         this.showImages = this.showImages.bind(this);
     }
 
@@ -138,8 +142,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         console.log('unitId: ' + unitId);
         
         updateData(unit, 'bearer ' + localStorage.getItem('token'), unitId).then(unit => {
-            console.log('msg from UnitContent: ' + JSON.stringify(unit));
-            console.log(' this is the state ' + JSON.stringify(this.state.unit));
             if (unit.error !== undefined) {
                 console.log( '(UnitContent.js) Error message: ' + unit.error)
             } else {
@@ -250,7 +252,8 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         if (unit.images[0] !== undefined) {
             return this.state.unit.images.map(img => {
                 return <div key={img.key}>
-                    <img src={img.image_url} alt='img' className={ styles.smallImg }/>
+                    
+                    <ShowImage image={img} unitid={this.getUnitId()}> </ShowImage>
                 </div>
             })
         }
@@ -281,14 +284,19 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
     // updating and viewing the notes TODO!!!!!
     editNotes() {
-        if (this.state.editingNotes === true) {
-            return <div>
-            <p className={ styles.smallText }>editing</p>
-            <button onClick={this.handleEdit} className={ styles.smallButtonStyle }>Save</button>
-            </div>
+        if (this.state.editingNotes) {
+            return <div><form onSubmit={this.saveNotes}>
+                <textarea 
+                    type="text" 
+                    className={ styles.editStyle } 
+                    value={this.state.unit.notes}
+                    onChange={this.editingNotes}
+                ></textarea>
+                <button  className={ styles.smallButtonStyle }>Save</button>
+            </form></div>
         } else {
             return <div>
-                <p className={ styles.smallText }>not editing {this.state.unit.notes}</p>
+                <p className={ styles.smallText }>{this.state.unit.notes}</p>
                 <button onClick={this.handleEdit} className={ styles.smallButtonStyle }>Edit</button>
                 </div>
         }
@@ -298,6 +306,37 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         event.preventDefault();
 
         this.setState({editingNotes: !this.state.editingNotes})
+    }
+
+    editingNotes = (event) => {
+        event.preventDefault();
+
+        const val = event.target.value;
+
+        this.setState((prevState) => ({
+            unit: {
+                ...prevState.unit,
+                notes: val,
+            },
+        }));
+    }
+
+    saveNotes = (event) => {
+        event.preventDefault();
+
+        const unit = {...this.state.unit};
+        const unitId = this.getUnitId();
+        this.setState({editingNotes: !this.state.editingNotes});
+        
+        updateData(unit, 'bearer ' + localStorage.getItem('token'), unitId).then(unit => {
+            console.log('msg from UnitContent: ' + JSON.stringify(unit));
+            console.log(' this is the state ' + JSON.stringify(this.state.unit));
+            if (unit.error !== undefined) {
+                console.log( '(UnitContent.js) Error message: ' + unit.error)
+            } else {
+                console.log( 'It worked.' )
+            }
+        })
     }
 
      //test
@@ -410,6 +449,10 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                     </div>
                             </div>
                         </Link>
+
+                        <div className={ styles.picStyle }>
+                            {this.showImages(this.state.unit)}
+                        </div>
                     </div>
                 )
             }
@@ -441,7 +484,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
                     <div className={ styles.picStyle }>
                         {this.showImages(this.state.unit)}
-                        
                     </div>
                 </div>
             )

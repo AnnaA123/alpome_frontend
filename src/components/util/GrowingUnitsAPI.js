@@ -60,4 +60,28 @@ const uploadImg = (data, token, unitId)=>{
     );
   };
 
+
+  //TODO delete image
+  const deleteImg = (data, token, unitId)=>{
+    console.log('imagedata: ' + data);
+    const options = {
+      method: 'DELETE',
+      body: data,
+      headers:{
+        'Authorization': token,
+      },
+      processData: false,
+      mimeType: "multipart/form-data",
+      contentType: false,
+    };
+    return fetch(apiUrl + 'unitimage/' + unitId, options).then(response =>{
+      console.log('heres the response: ' + response);
+      return response;
+    }).then(
+      success => console.log(success) // Handle the success response object
+    ).catch(
+      error => console.log(error) // Handle the error response object
+    );
+  };
+
 export { getSingleUnit, addNewUnit, updateData, uploadImg };

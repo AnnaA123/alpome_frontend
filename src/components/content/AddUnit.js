@@ -23,6 +23,7 @@ class AddUnit extends React.Component{
                 owner: localStorage.getItem('currentUser'),
                 shared_access: [],
                 stream_url: '',
+                notes: 'This is your garden',
                 images: []
             },
             wfDdNum: 1,
@@ -170,7 +171,7 @@ class AddUnit extends React.Component{
             if (unit.error !== undefined) {
                 this.setState({ errorMessage: 'Cannot add unit.' })
             } else {
-                this.props.history.push('/');
+                this.props.history.push('/home');
             }
         })
     }

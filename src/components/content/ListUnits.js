@@ -52,7 +52,6 @@ used in Home.js*/
         this.state.units.map((unit) => {
             console.log('units: ' + unit.nickname);
         })
-        
     }
 
     componentDidMount() {

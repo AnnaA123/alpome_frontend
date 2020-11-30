@@ -11,7 +11,7 @@ class CheckToken extends React.Component{
 
         //checks if the user logs in. if not, redirected to login
         if (uToken === null) {
-            this.props.history.push('/login');
+            this.props.history.push('/');
         }
     }
 
