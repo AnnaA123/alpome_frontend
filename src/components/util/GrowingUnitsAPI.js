@@ -24,7 +24,6 @@ const addNewUnit = (data, token) => {
 }
 
 const updateData = (data, token, unitId) => {
-  console.log('GROWINGUNITAPI data here: ' + JSON.stringify(data))
   const options = {
     method: 'PUT',
     body: JSON.stringify(data),
@@ -38,6 +37,20 @@ const updateData = (data, token, unitId) => {
   });
 }
 
+// delete a unit
+const deleteUnit = (token, unit) => {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Authorization': token,
+    },
+  };
+  return fetch(apiUrl + unit, options).then(response => {
+    return response;
+  })
+}
+
+// upload an image to the unit
 const uploadImg = (data, token, unitId)=>{
     console.log('imagedata: ' + data);
     const options = {
@@ -84,4 +97,4 @@ const uploadImg = (data, token, unitId)=>{
     );
   };
 
-export { getSingleUnit, addNewUnit, updateData, uploadImg };
+export { getSingleUnit, addNewUnit, updateData, deleteUnit, uploadImg };

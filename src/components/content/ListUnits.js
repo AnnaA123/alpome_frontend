@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { getSingleUser } from '../util/UsersAPI';
 import { getSingleUnit } from '../util/GrowingUnitsAPI';
+import Modal from 'react-modal';
 import styles from './mystyle.module.css'; 
 
 
@@ -23,6 +24,7 @@ used in Home.js*/
         this.getUnits = this.getUnits.bind(this);
     }
 
+    
 
     /*getUnits = (user1) => {
         const currentUser = user1;
@@ -59,6 +61,19 @@ used in Home.js*/
         this.getUnits(userId);
     }
 
+
+    /* 
+    <Modal
+                            className={styles.deleteButtonStyle}
+                            isOpen={this.state.openModal}
+                            onRequestClose={this.toggleModal}
+                            contentLabel="Modal with image"
+                            >
+                            <ion-icon name="trash" className={ styles.iconStyle } onClick={this.toggleModal}></ion-icon>
+                            
+                            <span >desc</span>
+                        </Modal>
+    */
     //first checks if there are units, then lists them
 
     render (){
@@ -71,12 +86,17 @@ used in Home.js*/
         } else {
             if (this.state.units[0] !== undefined) {
                 return this.state.units.map((unit) => {
-                    return <Link to={`/unit/${unit.unit_id}`} key={unit.unit_id}> 
+                    return <div><Link to={`/unit/${unit.unit_id}`} key={unit.unit_id}> 
                     <div className={ styles.boxstyle }>
                         <ion-icon name="flower-outline" className={ styles.iconStyle } ></ion-icon>
                         <p className={ styles.titleStyle }>{ unit.nickname }</p>
+                        
+                        
                     </div>
+                    
                     </Link>
+                    
+                    </div>
                 });
             } else {
                 return <div className={ styles.infoBox }>

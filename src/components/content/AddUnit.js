@@ -23,7 +23,7 @@ class AddUnit extends React.Component{
                 owner: localStorage.getItem('currentUser'),
                 shared_access: [],
                 stream_url: '',
-                notes: 'This is your garden',
+                notes: 'Here is a description of your garden!',
                 images: []
             },
             wfDdNum: 1,
@@ -157,9 +157,6 @@ class AddUnit extends React.Component{
     // submit the whole form
     handleSubmit = (event) => {
         event.preventDefault();
-
-        
-
 
         const unit = {...this.state.unit};
         

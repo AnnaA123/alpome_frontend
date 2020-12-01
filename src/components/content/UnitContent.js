@@ -1,11 +1,12 @@
 import React, { useState, useEffect} from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, withRouter } from 'react-router-dom';
 import styles from './mystyle.module.css'; 
 import { getSingleUnit, updateData, uploadImg } from '../util/GrowingUnitsAPI';
 import { getAllData, getDayData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
 import ShowImage from './ShowImage';
 import CheckWatered from './CheckWatered';
+import DeleteUnit from './DeleteUnit';
 
 /* the content for Unitview.js 
 NOTE: minmax values are currently hardcoded into the state, and are sent through props to StatsTemp */
@@ -68,6 +69,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         this.saveNotes = this.saveNotes.bind(this);
         this.showImages = this.showImages.bind(this);
     }
+
 
     //gets unit info from the alpome db and saves it to the state
     getUnit(id) {
@@ -204,39 +206,9 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             ...prevState,
             image: event.target.files[0]
         }));
-/*
-        const options = {
-            method: 'POST',
-            body: formData,
-            headers:{
-              'Authorization': 'bearer ' + localStorage.getItem('token'),
-            },
-        }
-
-        const unitId = this.getUnitId();
-
-        fetch('http://localhost:3004/api/growing_unit/unitimage/' + unitId, options).then(response =>{
-            return response.json;
-          }).then(json => {
-              console.log('jsonResponse: ' + json)
-          })
-*/
 
         // URL.createObjectURL()
         console.log('here we are ' + JSON.stringify(this.state.image));
-        
-/*
-        const unitId = this.getUnitId();
-
-        uploadImg(event.target.files[0], 'bearer ' + localStorage.getItem('token'), unitId).then(image => {
-            console.log('UnitContent img upload msg: ' + image);
-            if (image.error !== undefined) {
-                console.log( '(UnitContent.js) Error message: ' + image.error)
-            } else {
-                console.log( 'Image uploaded. ' + image[0] )
-            }
-        })
-        */
     }
 
     //posts image to unit at GrowingUnitsAPI.js
@@ -254,7 +226,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             if (image !== undefined) {
                 console.log( '(UnitContent.js) Error message: ' + image)
             } else {
-                console.log( 'Image uploaded. ' + image )
+                console.log( 'Image uploaded. ' + image );
             }
         })
     }
@@ -294,7 +266,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         }
     }
 
-    // updating and viewing the notes TODO!!!!!
+    // updating and viewing the notes
     editNotes() {
         if (this.state.editingNotes) {
             return <div><form onSubmit={this.saveNotes}>
@@ -465,6 +437,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                         <div className={ styles.picStyle }>
                             {this.showImages(this.state.unit)}
                         </div>
+                        <DeleteUnit unitid={this.getUnitId()} />
                     </div>
                 )
             }
@@ -497,10 +470,13 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                     <div className={ styles.picStyle }>
                         {this.showImages(this.state.unit)}
                     </div>
+
+                    <DeleteUnit unitid={this.getUnitId()} />
+                    
                 </div>
             )
         }}
     }
 }
 
-export default UnitContent;
+export default withRouter(UnitContent);
