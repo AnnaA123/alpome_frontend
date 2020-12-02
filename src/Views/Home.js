@@ -9,6 +9,7 @@ import styles from '../components/content/mystyle.module.css';
 there is also an add units button*/
 
  function Home(props) {
+     // <img src='' alt='img' className={ styles.iconStyle } />
     return (
         <div>
             <CheckToken />
@@ -17,7 +18,7 @@ there is also an add units button*/
 
             <Link to='/addnew'>
                 <div className={ styles.boxstyle2 }>
-                    <img src='' alt='img' className={ styles.iconStyle } />
+                    
                     <p>Add new unit +</p>
                 </div></Link>
             

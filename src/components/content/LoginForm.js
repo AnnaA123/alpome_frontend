@@ -32,7 +32,7 @@ class LoginForm extends React.Component {
                 const userIsSet = this.props.setUser(response.user);
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('currentUser', response.user.user_id);
-                this.props.history.push('/');
+                this.props.history.push('/home');
                 return userIsSet;
             } else {
                 this.setState({errorMessage: 'Username or password is incorrect.'});

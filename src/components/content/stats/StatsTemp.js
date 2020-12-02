@@ -52,11 +52,22 @@ import styles from '../mystyle.module.css';
 
      //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
      getSupragarden() {
-        getDayData(this.getToday()).then(stats => {
-            this.setState({
-                data: stats[0].data,
-                loading: false,
-            });
+
+        /* note to other devs: check the supragarden API. 
+        it suddenly isn't giving daily data anymore, causing the app to crash
+        
+        getDayData(this.getToday()) */
+        
+        getAllData().then(stats => {
+            if (stats[0] !== undefined) {
+               this.setState({
+                   data: stats[0].data,
+                   loading: false,
+               });
+            } else {
+                console.log('something is not working');
+            }
+            
         });
     }
 
@@ -74,7 +85,7 @@ import styles from '../mystyle.module.css';
                 type: this.props.location.propperinos.type
             })
         } else {
-            this.props.history.push('/');
+            this.props.history.push('/home');
         }
     }
 

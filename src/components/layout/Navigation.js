@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
             <h1 style={xClose} onClick={() => setShowMenu(false)}><ion-icon name="close-outline" style={xStyle}></ion-icon></h1>
             <ul>
                 <li>
-                    <Link to='/' style={navList} onClick={() => setShowMenu(false)}>Main</Link>
+                    <Link to='/home' style={navList} onClick={() => setShowMenu(false)}>Main</Link>
                 </li>
                 <li>
                     <Link to='/about' style={navList} onClick={() => setShowMenu(false)}>About</Link>
@@ -24,7 +24,7 @@ import { Link } from 'react-router-dom';
                     <Link to='/settings' style={navList} onClick={() => setShowMenu(false)}>Settings</Link>
                 </li>
                 <li>
-                    <Link to='/login' style={navList} onClick={() => {
+                    <Link to='/' style={navList} onClick={() => {
                         setShowMenu(false);
                         localStorage.clear();
                     }}>Log Out</Link>

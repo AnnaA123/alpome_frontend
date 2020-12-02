@@ -23,4 +23,17 @@ const register = (user) => {
     })
 }
 
-export { getSingleUser, register };
+// delete a user
+const deleteUser = (token, user) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Authorization': token,
+      },
+    };
+    return fetch(apiUrl + user, options).then(response => {
+      return response;
+    })
+  }
+
+export { getSingleUser, register, deleteUser };

@@ -50,17 +50,18 @@ class App extends React.Component {
           
           
   
-          <Router basename='/alpome'>
+          <Router basename=''>
   
             <Switch>
               <Route exact path='/' render={(props) => (
-                <Home {...props} user={this.state.user} units={this.state.units} />
+                
+                <Login {...props} state={this.state} setUser={this.setUser} />
               )}></Route>
               <Route path='/about' render={(props) => (
                 <About {...props} />
               )}></Route>
-              <Route path='/login' render={(props) => (
-                <Login {...props} state={this.state} setUser={this.setUser} />
+              <Route path='/home' render={(props) => (
+                <Home {...props} user={this.state.user} units={this.state.units} />
               )}></Route>
               <Route path='/signup' render={(props) => (
                 <Signup {...props} />

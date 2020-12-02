@@ -1,17 +1,17 @@
 import React from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 
-/* checks if user is logged in. if not, will be redirected to login */
+/* checks if user is logged in. if is, will be redirected to homepage */
 
-class CheckToken extends React.Component{
+class CheckNoToken extends React.Component{
 
     componentDidMount() {
         const uToken = localStorage.getItem('token');
 
         //checks if the user logs in. if not, redirected to login
-        if (uToken === null) {
-            this.props.history.push('/');
+        if (uToken !== null) {
+            this.props.history.push('/home');
         }
     }
 
@@ -23,4 +23,4 @@ class CheckToken extends React.Component{
     
 }
 
-export default withRouter(CheckToken);
+export default withRouter(CheckNoToken);

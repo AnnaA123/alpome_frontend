@@ -1,10 +1,12 @@
 import React, { useState, useEffect} from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, withRouter } from 'react-router-dom';
 import styles from './mystyle.module.css'; 
 import { getSingleUnit, updateData, uploadImg } from '../util/GrowingUnitsAPI';
-import { getDayData } from '../util/supragardenAPI';
+import { getAllData, getDayData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
+import ShowImage from './ShowImage';
 import CheckWatered from './CheckWatered';
+import DeleteUnit from './DeleteUnit';
 
 /* the content for Unitview.js 
 NOTE: minmax values are currently hardcoded into the state, and are sent through props to StatsTemp */
@@ -62,8 +64,12 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         this.topImg = this.topImg.bind(this);
         this.handleImgSubmit = this.handleImgSubmit.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.editNotes = this.editNotes.bind(this);
+        this.editingNotes = this.editingNotes.bind(this);
+        this.saveNotes = this.saveNotes.bind(this);
         this.showImages = this.showImages.bind(this);
     }
+
 
     //gets unit info from the alpome db and saves it to the state
     getUnit(id) {
@@ -138,8 +144,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         console.log('unitId: ' + unitId);
         
         updateData(unit, 'bearer ' + localStorage.getItem('token'), unitId).then(unit => {
-            console.log('msg from UnitContent: ' + JSON.stringify(unit));
-            console.log(' this is the state ' + JSON.stringify(this.state.unit));
             if (unit.error !== undefined) {
                 console.log( '(UnitContent.js) Error message: ' + unit.error)
             } else {
@@ -157,11 +161,23 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
      //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
      getSupragarden() {
-         getDayData(this.getToday()).then(stats => {
-             this.setState({
-                 data: stats[0].data,
-                 loading: false,
-             });
+         // this suddenly isnt working :^)
+
+         /* note to other devs: check the supragarden API. 
+         it suddenly isn't giving daily data anymore, causing the app to crash
+         
+         getDayData(this.getToday()) */
+         
+         getAllData().then(stats => {
+             if (stats[0] !== undefined) {
+                this.setState({
+                    data: stats[0].data,
+                    loading: false,
+                });
+             } else {
+                 console.log('something is not working');
+             }
+             
          });
      }
      
@@ -190,39 +206,9 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             ...prevState,
             image: event.target.files[0]
         }));
-/*
-        const options = {
-            method: 'POST',
-            body: formData,
-            headers:{
-              'Authorization': 'bearer ' + localStorage.getItem('token'),
-            },
-        }
-
-        const unitId = this.getUnitId();
-
-        fetch('http://localhost:3004/api/growing_unit/unitimage/' + unitId, options).then(response =>{
-            return response.json;
-          }).then(json => {
-              console.log('jsonResponse: ' + json)
-          })
-*/
 
         // URL.createObjectURL()
         console.log('here we are ' + JSON.stringify(this.state.image));
-        
-/*
-        const unitId = this.getUnitId();
-
-        uploadImg(event.target.files[0], 'bearer ' + localStorage.getItem('token'), unitId).then(image => {
-            console.log('UnitContent img upload msg: ' + image);
-            if (image.error !== undefined) {
-                console.log( '(UnitContent.js) Error message: ' + image.error)
-            } else {
-                console.log( 'Image uploaded. ' + image[0] )
-            }
-        })
-        */
     }
 
     //posts image to unit at GrowingUnitsAPI.js
@@ -240,7 +226,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             if (image !== undefined) {
                 console.log( '(UnitContent.js) Error message: ' + image)
             } else {
-                console.log( 'Image uploaded. ' + image )
+                console.log( 'Image uploaded. ' + image );
             }
         })
     }
@@ -250,7 +236,8 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         if (unit.images[0] !== undefined) {
             return this.state.unit.images.map(img => {
                 return <div key={img.key}>
-                    <img src={img.image_url} alt='img' className={ styles.smallImg }/>
+                    
+                    <ShowImage image={img} unitid={this.getUnitId()}> </ShowImage>
                 </div>
             })
         }
@@ -258,14 +245,19 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
     // the image at the top of the page
     // not working     value={this.state.image.file_name}
+
+    /*
+    
+    <form onSubmit={this.handleImgSend} >
+                    <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
+                    <button className={ styles.smallButtonStyle }>Add image</button>
+                </form>
+    */
     topImg = (imgList) => {
         if (imgList[0] !== undefined){
             return <div >
                 <img src={imgList[imgList.length - 1].image_url} alt='No image' className={ styles.bigImg } />
-                <form onSubmit={this.handleImgSend} >
-                    <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
-                    <button className={ styles.smallButtonStyle }>Add image</button>
-                </form>
+                
             </div>
         } else {
             return <div className={ styles.bigImg }>
@@ -279,16 +271,21 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         }
     }
 
-    // updating and viewing the notes TODO!!!!!
+    // updating and viewing the notes
     editNotes() {
-        if (this.state.editingNotes === true) {
-            return <div>
-            <p className={ styles.smallText }>editing</p>
-            <button onClick={this.handleEdit} className={ styles.smallButtonStyle }>Save</button>
-            </div>
+        if (this.state.editingNotes) {
+            return <div><form onSubmit={this.saveNotes}>
+                <textarea 
+                    type="text" 
+                    className={ styles.editStyle } 
+                    value={this.state.unit.notes}
+                    onChange={this.editingNotes}
+                ></textarea>
+                <button  className={ styles.smallButtonStyle }>Save</button>
+            </form></div>
         } else {
             return <div>
-                <p className={ styles.smallText }>not editing {this.state.unit.notes}</p>
+                <p className={ styles.smallText }>{this.state.unit.notes}</p>
                 <button onClick={this.handleEdit} className={ styles.smallButtonStyle }>Edit</button>
                 </div>
         }
@@ -298,6 +295,37 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         event.preventDefault();
 
         this.setState({editingNotes: !this.state.editingNotes})
+    }
+
+    editingNotes = (event) => {
+        event.preventDefault();
+
+        const val = event.target.value;
+
+        this.setState((prevState) => ({
+            unit: {
+                ...prevState.unit,
+                notes: val,
+            },
+        }));
+    }
+
+    saveNotes = (event) => {
+        event.preventDefault();
+
+        const unit = {...this.state.unit};
+        const unitId = this.getUnitId();
+        this.setState({editingNotes: !this.state.editingNotes});
+        
+        updateData(unit, 'bearer ' + localStorage.getItem('token'), unitId).then(unit => {
+            console.log('msg from UnitContent: ' + JSON.stringify(unit));
+            console.log(' this is the state ' + JSON.stringify(this.state.unit));
+            if (unit.error !== undefined) {
+                console.log( '(UnitContent.js) Error message: ' + unit.error)
+            } else {
+                console.log( 'It worked.' )
+            }
+        })
     }
 
      //test
@@ -410,6 +438,16 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                     </div>
                             </div>
                         </Link>
+
+                        <form onSubmit={this.handleImgSend} >
+                            <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
+                            <button className={ styles.smallButtonStyle }>Add image</button>
+                        </form>
+
+                        <div className={ styles.picStyle }>
+                            {this.showImages(this.state.unit)}
+                        </div>
+                        <DeleteUnit unitid={this.getUnitId()} />
                     </div>
                 )
             }
@@ -439,14 +477,21 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                         {this.editNotes()}
                     </div>
 
+                    <form onSubmit={this.handleImgSend} >
+                        <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
+                        <button className={ styles.smallButtonStyle }>Add image</button>
+                    </form>
+
                     <div className={ styles.picStyle }>
                         {this.showImages(this.state.unit)}
-                        
                     </div>
+
+                    <DeleteUnit unitid={this.getUnitId()} />
+                    
                 </div>
             )
         }}
     }
 }
 
-export default UnitContent;
+export default withRouter(UnitContent);

@@ -52,7 +52,7 @@ class SignUpForm extends React.Component {
                 if (user.error !== undefined) {
                     this.setState({ errorMessage: 'Cannot signup. Username, password or email needs to be changed.' })
                 } else {
-                    this.props.history.push('/login');
+                    this.props.history.push('/');
                 }
             });
         } else {
@@ -96,7 +96,7 @@ class SignUpForm extends React.Component {
 
                     <div className={styles.bottomText}>
                         <p>Already have an account?</p>
-                        <Link to='/login'>Login here!</Link>
+                        <Link to='/'>Login here!</Link>
                     </div>
 
                     <button type="submit" className={styles.buttonStyle}>Sign Up</button>
