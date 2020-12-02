@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { getSingleUser } from '../util/UsersAPI';
 import { getSingleUnit } from '../util/GrowingUnitsAPI';
-import Modal from 'react-modal';
 import styles from './mystyle.module.css'; 
 
 
