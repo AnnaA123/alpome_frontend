@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../layout/Header';
+import Header3 from '../layout/zTestComp';
 import { getSingleUser } from '../util/UsersAPI';
 
 //this is a page just for testing out some stuff. not a part of the final product /test8437586490743385891029748
@@ -54,7 +54,7 @@ import { getSingleUser } from '../util/UsersAPI';
 
         return (
             <div>
-                <Header />
+                <Header3 />
     
                 <div>
                     <p>{'\n'}</p>
@@ -68,8 +68,7 @@ import { getSingleUser } from '../util/UsersAPI';
                     </form>
                     <button type='submit' onClick={this.showName}>console log name</button>
 
-                    <embed src='https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read' style={embedStyle}></embed>
-
+                    <p>swdewfrgbehnbgfvfweqfwrgetngrfvedcw</p>
                 </div>
             </div>
         )

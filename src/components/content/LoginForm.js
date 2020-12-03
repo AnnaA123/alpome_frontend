@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import styles from './mystyle.module.css'; 
 import { login } from '../util/LoginAPI';
@@ -78,15 +77,6 @@ class LoginForm extends React.Component {
         event.preventDefault();
         this.doLogin();
     }
-
-    
-
-    /*componentDidMount() {
-        console.log('token' + localStorage.getItem('token'));
-        if(localStorage.getItem('token') !== null) {
-            console.log('token' + localStorage.getItem('token'));
-        }
-    }*/
     
     render () {
         return <div className={styles.fullFormStyle}>

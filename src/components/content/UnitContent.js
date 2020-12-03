@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from 'react';
-import { Link, useParams, withRouter } from 'react-router-dom';
+import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import styles from './mystyle.module.css'; 
 import { getSingleUnit, updateData, uploadImg } from '../util/GrowingUnitsAPI';
 import { getAllData, getDayData } from '../util/supragardenAPI';
@@ -111,14 +111,14 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         const weeks = days * 7;
         const years = days * 365;
 
-        //const lwm = this.getNow() - 1606145477788;
+        //test:  const lwm = this.getNow() - 1606145477788;
         const lwm = this.getNow() - this.state.unit.last_watered;
         const lwn = Math.round(lwm / days);
 
         return lwn;
     }
 
-    // for updating last_watered NOT WORKING
+    // for updating last_watered
     handleTimeUpdate = (event) => {
         event.preventDefault();
 
@@ -227,6 +227,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                 console.log( '(UnitContent.js) Error message: ' + image)
             } else {
                 console.log( 'Image uploaded. ' + image );
+                window.location.reload();
             }
         })
     }
@@ -243,16 +244,8 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         }
     }
 
-    // the image at the top of the page
-    // not working     value={this.state.image.file_name}
 
-    /*
-    
-    <form onSubmit={this.handleImgSend} >
-                    <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
-                    <button className={ styles.smallButtonStyle }>Add image</button>
-                </form>
-    */
+    // the image at the top of the page
     topImg = (imgList) => {
         if (imgList[0] !== undefined){
             return <div >

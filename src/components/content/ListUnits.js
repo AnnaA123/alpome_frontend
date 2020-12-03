@@ -1,12 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { getSingleUser } from '../util/UsersAPI';
-import { getSingleUnit } from '../util/GrowingUnitsAPI';
 import styles from './mystyle.module.css'; 
 
 
 /*this creates a new box for each unit on the main page
-
 used in Home.js*/
 
 
@@ -61,18 +59,6 @@ used in Home.js*/
     }
 
 
-    /* 
-    <Modal
-                            className={styles.deleteButtonStyle}
-                            isOpen={this.state.openModal}
-                            onRequestClose={this.toggleModal}
-                            contentLabel="Modal with image"
-                            >
-                            <ion-icon name="trash" className={ styles.iconStyle } onClick={this.toggleModal}></ion-icon>
-                            
-                            <span >desc</span>
-                        </Modal>
-    */
     //first checks if there are units, then lists them
 
     render (){

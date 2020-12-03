@@ -6,7 +6,8 @@ import styles from './mystyle.module.css';
 used in UnitContent.js and StatsTemp.js */
  function CheckTemp(props) {
      if (props.current >= props.low && props.current <= props.high) {
-        return <div style={emoSmile}><ion-icon name="happy-outline" className={ styles.iconStyle }></ion-icon> </div>
+        return <div style={emoSmile}><ion-icon name="happy-outline" className={ styles.iconStyle }></ion-icon>
+         </div>
      } else if (props.current >= props.min && props.current <= props.max) {
         return <div style={emoSmile}><ion-icon name="sad-outline" className={ styles.iconStyle }></ion-icon></div>
      } else {

@@ -1,13 +1,12 @@
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import React, { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React from 'react';
 import './App.css';
-import Header from './components/layout/Header';
 import Home from './Views/Home';
 import About from './Views/About';
 import Login from './Views/Login';
 import Signup from './Views/Signup';
 import Unitview from './Views/Unitview';
-import Temperature from './Views/StatsViews/Temperature';
+import Temperature from './Views/Temperature';
 import Addnew from './Views/Addnew';
 import Settings from './Views/Settings';
 

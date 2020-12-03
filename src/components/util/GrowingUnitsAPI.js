@@ -32,6 +32,7 @@ const updateData = (data, token, unitId) => {
       'Authorization': token,
     },
   };
+  console.log('heres updatedata body: ' + options.body)
   return fetch(apiUrl + unitId, options).then(response =>{
     return response.json();
   });
@@ -75,26 +76,19 @@ const uploadImg = (data, token, unitId)=>{
 
 
   //TODO delete image
-  const deleteImg = (data, token, unitId)=>{
-    console.log('imagedata: ' + data);
+  const deleteImg = (file, token, unitId) => {
+    const data = {"fileName": file};
     const options = {
       method: 'DELETE',
-      body: data,
+      body: JSON.stringify(data),
       headers:{
+        'Content-Type': 'application/json',
         'Authorization': token,
-      },
-      processData: false,
-      mimeType: "multipart/form-data",
-      contentType: false,
+      }
     };
     return fetch(apiUrl + 'unitimage/' + unitId, options).then(response =>{
-      console.log('heres the response: ' + response);
-      return response;
-    }).then(
-      success => console.log(success) // Handle the success response object
-    ).catch(
-      error => console.log(error) // Handle the error response object
-    );
+      return response.json();
+    })
   };
 
-export { getSingleUnit, addNewUnit, updateData, deleteUnit, uploadImg };
+export { getSingleUnit, addNewUnit, updateData, deleteUnit, uploadImg, deleteImg };

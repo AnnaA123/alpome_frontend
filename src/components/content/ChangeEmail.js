@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { getSingleUser } from '../util/UsersAPI';
+import { withRouter } from 'react-router-dom';
+import { getSingleUser, updateUser } from '../util/UsersAPI';
 import styles from './mystyle.module.css';
 
 /* change users email in settings */
@@ -10,6 +10,7 @@ class ChangeEmail extends React.Component{
         super(props);
         this.state = {
             user: '',
+            newEmail: '',
             loading: true,
             errorMessage: '',
         };
@@ -32,21 +33,40 @@ class ChangeEmail extends React.Component{
         event.preventDefault();
         const val = event.target.value;
 
-        this.setState((prevState) => ({
-            user: {
-                ...prevState.unit,
-                email: val,
-            },
-        }));
+        this.setState({
+            newEmail: val,
+        });
     }
 
     saveEmail = (event) => {
         event.preventDefault();
 
-        const user = {...this.state.user};
-        console.log('email changed (in state only): ' + user.email);
+        //const user = {...this.state.user};
         
-        
+        this.setState((prevState) => ({
+            user: {
+                ...prevState.unit,
+                email: this.state.newEmail,
+            },
+        }));
+
+        console.log('userinfo: ' + JSON.stringify(this.state.user));
+
+        const user = {
+            "own_units": this.state.user.own_units,
+            "units_with_access": this.state.user.units_with_access,
+            "email": this.state.newEmail,
+            "username": this.state.user.username,
+            "user_id": this.state.user.user_id
+        }
+
+        updateUser(user, 'bearer ' + localStorage.getItem('token'), this.state.user.user_id).then(user => {
+            if (user.error !== undefined) {
+                console.log( '(ChangeEmail.js) Error message: ' + user.error)
+            } else {
+                console.log( 'Email changed.' )
+            }
+        });
     }
 
     //test
@@ -67,7 +87,7 @@ class ChangeEmail extends React.Component{
             <label>New email:</label>
                 <input 
                     type="text" 
-                    value={this.state.user.email}
+                    value={this.state.newEmail}
                     onChange={this.editEmail} 
                     name="email"/>
                 <button type="submit" className={styles.buttonStyle}>Change email</button>

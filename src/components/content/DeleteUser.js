@@ -64,11 +64,12 @@ used in UnitContent*/
 
     render (){
         return <div>
-            {this.delMessage()}
+            
             <button className={styles.deleteButtonStyle} onClick={this.popUpDel}>
                 <p>Delete user</p>
                 <ion-icon name="trash" className={ styles.iconStyle }></ion-icon> 
             </button>
+            {this.delMessage()}
         </div>
     }
 }

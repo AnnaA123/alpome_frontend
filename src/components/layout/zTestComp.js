@@ -1,18 +1,26 @@
 import React from 'react';
 import Navigation from './Navigation';
-import { Link } from 'react-router-dom';
 import styles from '../content/mystyle.module.css';
 
 //header with a back button, for UnitView.js, Addnew.js and others
 
-
- function Header3(props) {
-    return (
-        <header className={ styles.headerStyle }>
+/*
+<header className={ styles.headerStyle }>
             <Link to={`/${props.previous}`} style={iconStyle}>BACK</Link>
             <h1 style={logoStyle}>Alpome</h1>
             <Navigation style={iconStyle} />
         </header>
+
+*/
+
+
+ function Header3(props) {
+    return (
+    <header className={ styles.headerStyle }>
+        <img className={ styles.logoStyle } src={require('../../images/alpomeheader3.jpg')} alt='alpomelogo' />
+        <Navigation className={ styles.iconStyle } />
+    </header>
+        
     )
 }
 
@@ -20,8 +28,10 @@ import styles from '../content/mystyle.module.css';
 
 const logoStyle = {
     width: '100%',
-    width: '200px',
+    maxWidth: '300px',
     right: '0',
+    margin: 'auto',
+    zIndex: '60',
 }
 
 const iconStyle = {

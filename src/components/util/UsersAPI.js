@@ -23,6 +23,22 @@ const register = (user) => {
     })
 }
 
+// update user data at ChangeEmail.js
+const updateUser = (data, token, user) => {
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+  };
+  console.log('heres updateUSER body: ' + options.body)
+  return fetch(apiUrl + user, options).then(response =>{
+    return response.json();
+  });
+}
+
 // delete a user
 const deleteUser = (token, user) => {
     const options = {
@@ -36,4 +52,4 @@ const deleteUser = (token, user) => {
     })
   }
 
-export { getSingleUser, register, deleteUser };
+export { getSingleUser, register, updateUser, deleteUser };

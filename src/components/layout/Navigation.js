@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import styles from '../content/mystyle.module.css';
 
  function Navigation() {
      const [showMenu, setShowMenu] = useState(false)
@@ -38,7 +39,7 @@ import { Link } from 'react-router-dom';
 
     return (
         <nav>
-            <span style={white} onClick={() => setShowMenu(!showMenu)}>
+            <span className={ styles.threeLines }  onClick={() => setShowMenu(!showMenu)}>
                 <ion-icon name="menu"></ion-icon>
             </span>
 
@@ -60,7 +61,7 @@ const navStyle = {
     right: '0',
     height: '100%',
     width: '70%',
-    zIndex: '50',
+    zIndex: '100',
 }
 
 const xClose ={
@@ -89,15 +90,7 @@ const maskStyle = {
     left: '0',
     height: '100%',
     width: '100%',
-    zIndex: '50',
-}
-
-const white = {
-    color: '#fff',
-    fontSize: '46px',
-    display: 'flex',
-    verticalAlign: 'middle',
-    lineHeight: 'normal',
+    zIndex: '100',
 }
 
 const xStyle = {

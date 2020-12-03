@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './mystyle.module.css';
-import { Link } from 'react-router-dom';
+import { deleteImg } from '../util/GrowingUnitsAPI';
+import { withRouter } from 'react-router-dom';
 
  function ShowImage(props) {
      const [showImg, setShowImg] = useState(false)
@@ -8,6 +9,7 @@ import { Link } from 'react-router-dom';
      //HAMBURGER MENU (CLICK TO OPEN)
      let pic
      let picMask
+     const thisUnit = props.unitid
 
      // TODO: clicking the trashcan deletes the image
      if (showImg) {
@@ -17,7 +19,18 @@ import { Link } from 'react-router-dom';
             <h1 style={xClose} onClick={() => setShowImg(false)}><ion-icon name="close-outline" style={xStyle}></ion-icon></h1>
             <img src={props.image.image_url} alt='none' />
             
-            <h1 style={delStyle} onClick={() => setShowImg(false)}><ion-icon name="trash-outline" style={trashStyle}></ion-icon></h1>
+            <h1 style={delStyle} onClick={() => 
+                
+                deleteImg(props.image.fileName, 'bearer ' + localStorage.getItem('token'), thisUnit).then(pic => {
+                    console.log('pic deleted: ' + JSON.stringify(pic))
+                    if (pic.error !== undefined) {
+                        console.log('failed to delete image' + JSON.stringify(pic.error))
+                    } else {
+                        console.log('image deleted');
+                        window.location.reload();
+                    }
+                })
+                }><ion-icon name="trash-outline" style={trashStyle}></ion-icon></h1>
         </div>
 
         picMask =
@@ -115,4 +128,4 @@ const trashStyle = {
     lineHeight: 'normal',
 }
 
-export default ShowImage;
+export default withRouter(ShowImage);
