@@ -45,7 +45,7 @@ class ChangeEmail extends React.Component{
         
         this.setState((prevState) => ({
             user: {
-                ...prevState.unit,
+                ...prevState.user,
                 email: this.state.newEmail,
             },
         }));
