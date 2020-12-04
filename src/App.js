@@ -68,7 +68,7 @@ class App extends React.Component {
               <Route exact path='/unit/:unitid' render={(props) => (
                 <Unitview {...props} user={this.state.user} />
               )}></Route>
-              <Route path='/unit/temperature/:id' render={(props) => (
+              <Route path='/unit/data/:id' render={(props) => (
                 <Temperature {...props} units={this.state.units} />
               )}></Route>
               <Route path='/addnew' render={(props) => (

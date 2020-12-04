@@ -232,12 +232,16 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         })
     }
 
-    // photos at the bottom of the screen <img src={img.image_url} alt='img' className={ styles.bigImg }/>
+    // photos at the bottom of the screen
     showImages = (unit) => {
+        const imgArr = unit.images;
+        const revImgArr = imgArr.reverse();
+
+        // first reverse the order of the images to show the most recent one at the top
+
         if (unit.images[0] !== undefined) {
-            return this.state.unit.images.map(img => {
+            return revImgArr.map(img => {
                 return <div key={img.key}>
-                    
                     <ShowImage image={img} unitid={this.getUnitId()}> </ShowImage>
                 </div>
             })
@@ -268,6 +272,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     editNotes() {
         if (this.state.editingNotes) {
             return <div><form onSubmit={this.saveNotes}>
+                <h3>Notes</h3>
                 <textarea 
                     type="text" 
                     className={ styles.editStyle } 
@@ -278,6 +283,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             </form></div>
         } else {
             return <div>
+                <h3>Notes</h3>
                 <p className={ styles.smallText }>{this.state.unit.notes}</p>
                 <button onClick={this.handleEdit} className={ styles.smallButtonStyle }>Edit</button>
                 </div>
@@ -362,7 +368,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                         <div className={ styles.bigImg }>{this.topImg(this.state.unit.images)}</div>
                         <h1>{this.state.unit.nickname}</h1>
                         <Link to={{
-                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            pathname: `/unit/data/${this.state.unit.unit_id}`,
                             propperinos: { type: 'temp', minmax: this.state.minmax.temp }
                         }} unitid={this.state.unit.unit_id} type='temp'>
                             <div className={ styles.boxstyle3 }>
@@ -376,7 +382,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                             </div>
                         </Link>
                         <Link to={{
-                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            pathname: `/unit/data/${this.state.unit.unit_id}`,
                             propperinos: { type: 'tempW', minmax: this.state.minmax.tempW }
                         }}>
                             <div className={ styles.boxstyle3 }>
@@ -390,7 +396,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                             </div>
                         </Link>
                         <Link to={{
-                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            pathname: `/unit/data/${this.state.unit.unit_id}`,
                             propperinos: { type: 'ph', minmax: this.state.minmax.ph }
                         }}>
                             <div className={ styles.boxstyle3 }>
@@ -404,7 +410,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                             </div>
                         </Link>
                         <Link to={{
-                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            pathname: `/unit/data/${this.state.unit.unit_id}`,
                             propperinos: { type: 'h', minmax: this.state.minmax.h }
                         }}>
                             <div className={ styles.boxstyle3 }>
@@ -418,7 +424,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                             </div>
                         </Link>
                         <Link to={{
-                            pathname: `/unit/temperature/${this.state.unit.unit_id}`,
+                            pathname: `/unit/data/${this.state.unit.unit_id}`,
                             propperinos: { type: 'ec', minmax: this.state.minmax.ec }
                         }}>
                             <div className={ styles.boxstyle3 }>

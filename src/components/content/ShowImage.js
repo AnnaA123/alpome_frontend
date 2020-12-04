@@ -20,7 +20,6 @@ import { withRouter } from 'react-router-dom';
             <img src={props.image.image_url} alt='none' />
             
             <h1 style={delStyle} onClick={() => 
-                
                 deleteImg(props.image.fileName, 'bearer ' + localStorage.getItem('token'), thisUnit).then(pic => {
                     console.log('pic deleted: ' + JSON.stringify(pic))
                     if (pic.error !== undefined) {

@@ -18,7 +18,7 @@ class AddUnit extends React.Component{
                 location: '',
                 supragarden: false,
                 last_watered: null,
-                watering_frequency: null,
+                watering_frequency: 3600000,
                 data_source: null,
                 owner: localStorage.getItem('currentUser'),
                 shared_access: [],
@@ -27,14 +27,15 @@ class AddUnit extends React.Component{
                 images: []
             },
             wfDdNum: 1,
-            wfDdVal: 'days',
+            wfDdVal: 'hours',
 
             formToggler: false,
             errorMessage: '',
         };
         
         this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleClickT = this.handleClickT.bind(this);
+        this.handleClickF = this.handleClickF.bind(this);
         this.handleTest = this.handleTest.bind(this);
     }
     
@@ -52,7 +53,21 @@ class AddUnit extends React.Component{
         }));
     }
 
-    toggleForm = (previous) => {
+    // set supragarden as true and null watering_frequency
+    toggleFormT = (previous) => {
+        this.setState((prevState) => ({
+            unit: {
+                ...prevState.unit,
+                supragarden: !previous,
+                watering_frequency: null,
+            },
+            formToggler: !previous,
+        }));
+        
+    }
+
+    // set supragarden as false and set the watering frequency
+    toggleFormF = (previous) => {
         this.setState((prevState) => ({
             unit: {
                 ...prevState.unit,
@@ -60,6 +75,8 @@ class AddUnit extends React.Component{
             },
             formToggler: !previous,
         }));
+
+        this.wateringFreqCalc();
         
     }
 
@@ -134,10 +151,16 @@ class AddUnit extends React.Component{
         
     }
 
-    // supragarden true/false toggle button
-    handleClick =(event) => {
+    // set supragarden as true button
+    handleClickT =(event) => {
         event.preventDefault();
-        this.toggleForm(this.state.formToggler);
+        this.toggleFormT(this.state.formToggler);
+    }
+
+    // set supragarden as false button
+    handleClickF =(event) => {
+        event.preventDefault();
+        this.toggleFormF(this.state.formToggler);
     }
 
     //test
@@ -176,7 +199,19 @@ class AddUnit extends React.Component{
     /* the if/else statement changes input and state depending on whether the unit is connected to a 
     supragarden or not supragarden has a data source while a normal unit has watering frequency*/
 
-    // TEST BUTTON: <button onClick={this.handleClick}>test</button>
+    /* 
+button for easily turning the unit into supragarden monitor. 
+if included: add to the right above the watering frequency selectors.
+for if(formToggler) make sure to add a datasource input 
+(datasource has not been properly configured due to issues with the supragarden api)
+    <label>
+        <button onClick={this.handleClickT} className={styles.choiceButtonStyle}>
+            <ion-icon name="radio-button-off-outline"></ion-icon>
+        </button>
+        Is it a hydroponic system?
+    </label>
+    
+    TEST BUTTON: <button onClick={this.handleClick}>test</button> */
 
     render () {
         if (this.state.formToggler === true) { 
@@ -198,7 +233,7 @@ class AddUnit extends React.Component{
                 
                 
                 <label>
-                    <button onClick={this.handleClick} className={styles.choiceButtonStyle}><ion-icon name="radio-button-on-outline" ></ion-icon></button>
+                    <button onClick={this.handleClickF} className={styles.choiceButtonStyle}><ion-icon name="radio-button-on-outline" ></ion-icon></button>
                     Is it a hydroponic system?
                 </label>
                 
@@ -223,11 +258,6 @@ class AddUnit extends React.Component{
                     value={this.state.location}
                     onChange={this.handleChange} 
                     name="location"/>
-                
-                <label>
-                <button onClick={this.handleClick} className={styles.choiceButtonStyle}><ion-icon name="radio-button-off-outline"></ion-icon></button>
-                    Is it a hydroponic system?
-                </label>
 
                 <label>Watering Frequency</label>
                 <select value={this.state.wfDdNum} onChange={this.onNumSelect} className={styles.dropDownStyle}>
