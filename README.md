@@ -1,10 +1,9 @@
-Frontend for alpome app. The project will most likely be continued more on the backend side, this is just for personal backup.
+Frontend for alpome app.
 Backend can be found at https://github.com/pokumars/alpome_backend
 
 
 
-(React stuff below)
--------------------------------------------------------------------------------------------------------------------------------
+==========================================================================================================
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
