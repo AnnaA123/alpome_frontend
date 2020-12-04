@@ -327,6 +327,11 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         })
     }
 
+    // rounds the number to one decimal
+    rounder = (num) => {
+        return num.toFixed(1);
+    }
+
      //test
      handleClick(event) {
         event.preventDefault();
@@ -377,7 +382,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                 
                                     <div>
                                         <p>Temperature</p>
-                                        <p className={ styles.smallText }>{this.state.data.temp} °C</p>
+                                        <p className={ styles.smallText }>{this.rounder(this.state.data.temp)} °C</p>
                                     </div>
                             </div>
                         </Link>
@@ -391,7 +396,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                 
                                     <div>
                                         <p>Water Temperature</p>
-                                        <p className={ styles.smallText }>{this.state.data.tempW} °C</p>
+                                        <p className={ styles.smallText }>{this.rounder(this.state.data.tempW)} °C</p>
                                     </div>
                             </div>
                         </Link>
@@ -405,7 +410,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                 
                                     <div>
                                         <p>pH</p>
-                                        <p className={ styles.smallText }>{this.state.data.ph} </p>
+                                        <p className={ styles.smallText }>{this.rounder(this.state.data.ph)} </p>
                                     </div>
                             </div>
                         </Link>
@@ -419,7 +424,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                                 
                                     <div>
                                         <p>Humidity</p>
-                                        <p className={ styles.smallText }>{this.state.data.h} %</p>
+                                        <p className={ styles.smallText }>{this.rounder(this.state.data.h)} %</p>
                                     </div>
                             </div>
                         </Link>
