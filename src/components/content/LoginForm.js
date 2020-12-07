@@ -17,10 +17,8 @@ class LoginForm extends React.Component {
             validUser: true,
         };
         
-        //binding 'this'
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        //this.setUser = this.setUser.bind(this);
         this.doLogin = this.doLogin.bind(this);
     }
 
@@ -36,18 +34,11 @@ class LoginForm extends React.Component {
             } else {
                 this.setState({errorMessage: 'Username or password is incorrect.'});
             }
-        }).catch((err) => {
-            console.log(err);
         })
     };
     
-    //writing or pressing anything
+    //input handling
     handleChange(event) {   
-        /*let nam = event.target.name;
-        let val = event.target.value;
-        
-        this.setState({[nam]: val});  */
-
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -58,21 +49,8 @@ class LoginForm extends React.Component {
                 [name]: value,
             },
         }));
-
-        /*
-        if (name === 'username') {
-            this.checkUsername(target.value);
-          }
-*/
     }
-/*
-    checkUsername = (username) => {
-        checkUser(username).then((result) => {
-          console.log(result.available);
-          this.setState({ validUser: result.available });
-        });
-    };
-*/
+
     handleSubmit(event) {
         event.preventDefault();
         this.doLogin();
@@ -86,12 +64,15 @@ class LoginForm extends React.Component {
                     <input 
                         type="text" 
                         name="username" id="username" label="Username"
+                        maxLength="20"
                         value={this.state.user.username}
                         onChange={this.handleChange} />
                     <label>Password</label>
                     <input 
                         type="password" 
                         name="password" id="password" label="Password"
+                        maxLength="50"
+                        minLength="5"
                         value={this.state.user.password}
                         onChange={this.handleChange}
                          />
@@ -107,11 +88,10 @@ class LoginForm extends React.Component {
                     </div>
 
                     <button type="submit" 
-                    className={styles.buttonStyle} 
-                    >Login</button>
+                        className={styles.buttonStyle}>
+                        Login
+                    </button>
                 </form>
-
-                
                 </div>
     }
 }

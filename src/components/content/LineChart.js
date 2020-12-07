@@ -45,7 +45,8 @@ function LineChart({graphReadings, parameter}) {
   }
 
   /*
-  good code, but not necessarily needed?
+  good stuff, but i dont think the dropdown is needed?
+  in case it is, add this jsx:
   
   <label htmlFor="graphDataType">Select measurements </label>
 

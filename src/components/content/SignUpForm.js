@@ -23,11 +23,6 @@ class SignUpForm extends React.Component {
     }
     
     handleChange(event) {   
-        /*let nam = event.target.name;
-        let val = event.target.value;
-        
-        this.setState({[nam]: val});  */
-
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -58,7 +53,6 @@ class SignUpForm extends React.Component {
         } else {
             this.setState({ errorMessage: 'Passwords do not match.' })
         }
-        
     }
 
     render () {
@@ -69,24 +63,30 @@ class SignUpForm extends React.Component {
                     <input 
                         type="text" 
                         name="username" 
+                        maxLength="20"
                         value={this.state.username} 
                         onChange={this.handleChange} />
                     <label>Email Address</label>
                     <input 
                         type="text" 
                         name="email"
+                        maxLength="200"
                         value={this.state.email} 
                         onChange={this.handleChange} />
                     <label>Password</label>
                     <input 
                         type="password" 
                         name="password" 
+                        maxLength="50"
+                        minLength="5"
                         value={this.state.password} 
                         onChange={this.handleChange} />
                     <label>Password</label>
                     <input 
                         type="password" 
                         name="checkPw" 
+                        maxLength="50"
+                        minLength="5"
                         value={this.state.checkPw} 
                         onChange={this.handleChange} />
 

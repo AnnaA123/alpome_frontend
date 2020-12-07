@@ -3,9 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { deleteUser } from '../util/UsersAPI';
 import styles from './mystyle.module.css'; 
 
-
 /*deletes the unit
-
 used in UnitContent*/
  class DeleteUnit extends React.Component {
 
@@ -14,10 +12,8 @@ used in UnitContent*/
         this.state = {
             delMsg: false,
         }
-
         this.popUpDel = this.popUpDel.bind(this);
         this.delUnit = this.delUnit.bind(this);
-        
     }
 
     // toggles message view
@@ -39,19 +35,15 @@ used in UnitContent*/
      // del button (opens message)
      popUpDel = (event) => {
         event.preventDefault();
-
         this.toggleDelMsg();
      }
 
      //deletes the user from backend
      delUnit = (event) => {
         event.preventDefault();
-
         const userId = localStorage.getItem('currentUser');
-        console.log('props working: ' + userId);
 
         deleteUser('bearer ' + localStorage.getItem('token'), userId).then(user => {
-            console.log('user deleted: ' + user)
             if (user.error !== undefined) {
                 this.setState({ errorMessage: 'Could not delete user' })
             } else {
@@ -61,10 +53,8 @@ used in UnitContent*/
         })
      }
 
-
     render (){
         return <div>
-            
             <button className={styles.deleteButtonStyle} onClick={this.popUpDel}>
                 <p>Delete user</p>
                 <ion-icon name="trash" className={ styles.iconStyle }></ion-icon> 

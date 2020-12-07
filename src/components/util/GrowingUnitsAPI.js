@@ -32,7 +32,6 @@ const updateData = (data, token, unitId) => {
       'Authorization': token,
     },
   };
-  console.log('heres updatedata body: ' + options.body)
   return fetch(apiUrl + unitId, options).then(response =>{
     return response.json();
   });
@@ -53,7 +52,6 @@ const deleteUnit = (token, unit) => {
 
 // upload an image to the unit
 const uploadImg = (data, token, unitId)=>{
-    console.log('imagedata: ' + data);
     const options = {
       method: 'POST',
       body: data,
@@ -65,13 +63,8 @@ const uploadImg = (data, token, unitId)=>{
       contentType: false,
     };
     return fetch(apiUrl + 'unitimage/' + unitId, options).then(response =>{
-      console.log('heres the response: ' + response);
       return response;
-    }).then(
-      success => console.log(success) // Handle the success response object
-    ).catch(
-      error => console.log(error) // Handle the error response object
-    );
+    })
   };
 
 

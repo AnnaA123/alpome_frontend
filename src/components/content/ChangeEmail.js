@@ -12,7 +12,7 @@ class ChangeEmail extends React.Component{
             user: '',
             newEmail: '',
             loading: true,
-            errorMessage: '',
+            updateMessage: '',
         };
         
         this.handleTest = this.handleTest.bind(this);
@@ -40,17 +40,12 @@ class ChangeEmail extends React.Component{
 
     saveEmail = (event) => {
         event.preventDefault();
-
-        //const user = {...this.state.user};
-        
         this.setState((prevState) => ({
             user: {
                 ...prevState.user,
                 email: this.state.newEmail,
             },
         }));
-
-        console.log('userinfo: ' + JSON.stringify(this.state.user));
 
         const user = {
             "own_units": this.state.user.own_units,
@@ -62,9 +57,9 @@ class ChangeEmail extends React.Component{
 
         updateUser(user, 'bearer ' + localStorage.getItem('token'), this.state.user.user_id).then(user => {
             if (user.error !== undefined) {
-                console.log( '(ChangeEmail.js) Error message: ' + user.error)
+                this.setState(() => ({ updateMessage: 'Failed to update email.'}));
             } else {
-                console.log( 'Email changed.' )
+                this.setState(() => ({ updateMessage: 'Email updated.'}));
             }
         });
     }
@@ -87,9 +82,15 @@ class ChangeEmail extends React.Component{
             <label>New email:</label>
                 <input 
                     type="text" 
+                    maxLength="200"
+                    minLength="3"
                     value={this.state.newEmail}
                     onChange={this.editEmail} 
                     name="email"/>
+
+                    <div>
+                        <p className={styles.updateText}>{this.state.updateMessage}</p>
+                    </div>
                 <button type="submit" className={styles.buttonStyle}>Change email</button>
             </form>
             

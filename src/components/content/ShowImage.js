@@ -14,115 +14,76 @@ import { withRouter } from 'react-router-dom';
      // TODO: clicking the trashcan deletes the image
      if (showImg) {
          pic = 
-        <div 
-        className={ styles.imgStyle }>
-            <h1 style={xClose} onClick={() => setShowImg(false)}><ion-icon name="close-outline" style={xStyle}></ion-icon></h1>
-            <img src={props.image.image_url} alt='none' />
-            
+        <div className={ styles.imgStyle }>
+            <div style={iconsStyle}>
             <h1 style={delStyle} onClick={() => 
                 deleteImg(props.image.fileName, 'bearer ' + localStorage.getItem('token'), thisUnit).then(pic => {
                     console.log('pic deleted: ' + JSON.stringify(pic))
                     if (pic.error !== undefined) {
-                        console.log('failed to delete image' + JSON.stringify(pic.error))
+                        console.log(pic.error);
                     } else {
-                        console.log('image deleted');
                         window.location.reload();
-                    }
-                })
-                }><ion-icon name="trash-outline" style={trashStyle}></ion-icon></h1>
+                    }})
+                }><ion-icon name="trash-outline"  style={trashStyle}></ion-icon></h1>
+            <h1 style={xClose} onClick={() => setShowImg(false)}><ion-icon name="close-outline" style={xStyle}></ion-icon></h1>
+            </div>
+            <img className={ styles.imgSize } src={props.image.image_url} alt='none' />
         </div>
 
         picMask =
-        <div style={maskStyle} onClick={() => setShowImg(false)}></div>
+        <div className={ styles.maskStyle } onClick={() => setShowImg(false)}></div>
      }
 
     return (
-        <nav>
-            <span style={white} onClick={() => setShowImg(!showImg)}>
+        <div>
+            <span style={listImg} onClick={() => setShowImg(!showImg)}>
                 <img src={props.image.image_url} alt='img' className={ styles.smallImg }/>
             </span>
-
             { picMask }
-
             { pic }
-        </nav>
-
-        
+        </div>
     )
 }
-
 //STYLING
-/*
-const imgStyle = {
-    position: 'fixed',
-    top: '10%',
-    bottom: '30%',
-    right: '0',
-    left: '0',
-    maxWidth: '100%',
-    maxHeight: '80%',
-    zIndex: '100',
+const iconsStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '400px',
 }
-*/
+/* x to close the image */
 const xClose ={
-    position: 'fixed',
     textAlign: 'right',
     right: '0',
     padding: '5px',
-    marginRight: '10px',
+    marginRight: '20px',
+}
+const xStyle = {
+    color: '#fff',
+    fontSize: '46px',
+    verticalAlign: 'middle',
+    lineHeight: 'normal',
 }
 
+/* trash icon to delete the image */
 const delStyle ={
-    position: 'fixed',
     textAlign: 'left',
-    left: '0',
     bottom: '10px',
     padding: '5px',
     marginLeft: '10px',
 }
-
-const navList = {
-    display: 'block',
-    marginTop: '20px',
-    padding: '20px',
-    width: '100%',
-    color: '#fff',
-    fontSize: '20px',
-    background: '#227D26',
-    borderLeft: '6px solid',
-    borderColor: '#003300',
-}
-
-const maskStyle = {
-    position: 'fixed',
-    backgroundColor: '#000',
-    opacity: '0.3',
-    top: '0',
-    left: '0',
-    height: '100%',
-    width: '100%',
-    zIndex: '100',
-}
-
-const white = {
-    color: '#fff',
-    fontSize: '46px',
-    display: 'flex',
-    verticalAlign: 'middle',
-    lineHeight: 'normal',
-}
-
-const xStyle = {
-    color: '#fff',
-    fontSize: '46px',
-    
-    verticalAlign: 'middle',
-    lineHeight: 'normal',
-}
-
 const trashStyle = {
     color: '#fff',
     fontSize: '46px',
+    verticalAlign: 'middle',
+    lineHeight: 'normal',
+}
+
+/* small version of image in a list */
+const listImg = {
+    color: '#fff',
+    fontSize: '46px',
+    display: 'flex',
     verticalAlign: 'middle',
     lineHeight: 'normal',
 }

@@ -33,7 +33,6 @@ const updateUser = (data, token, user) => {
       'Authorization': token,
     },
   };
-  console.log('heres updateUSER body: ' + options.body)
   return fetch(apiUrl + user, options).then(response =>{
     return response.json();
   });

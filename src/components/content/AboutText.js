@@ -2,13 +2,17 @@ import React from 'react'
 import styles from './mystyle.module.css'; 
 
 //used in About.js
-
  function AboutText() {
     return (
         <div className={styles.infoBox}>
-            <h1>About us</h1>
+            <h1>About Monap</h1>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            We are a monitoring software builder company that enters
+            the market with a first contract for a hydroponic garden
+            monitoring application and after have made agreements
+            with shops and websites to evolve this last one that expects
+            to reach others markets in a few years like home security
+            systems.
             </p>
         </div>
     )

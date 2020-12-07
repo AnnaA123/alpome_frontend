@@ -34,7 +34,7 @@ import styles from '../content/mystyle.module.css';
         </div>
 
         navMenuMask =
-        <div style={maskStyle} onClick={() => setShowMenu(false)}></div>
+        <div className={ styles.maskStyle } onClick={() => setShowMenu(false)}></div>
      }
 
     return (
@@ -64,6 +64,13 @@ const navStyle = {
     zIndex: '100',
 }
 
+/* x to close the menu */
+const xStyle = {
+    color: '#fff',
+    fontSize: '46px',
+    verticalAlign: 'middle',
+    lineHeight: 'normal',
+}
 const xClose ={
     textAlign: 'right',
     padding: '5px',
@@ -80,25 +87,6 @@ const navList = {
     background: '#227D26',
     borderLeft: '6px solid',
     borderColor: '#003300',
-}
-
-const maskStyle = {
-    position: 'fixed',
-    backgroundColor: '#000',
-    opacity: '0.3',
-    top: '0',
-    left: '0',
-    height: '100%',
-    width: '100%',
-    zIndex: '100',
-}
-
-const xStyle = {
-    color: '#fff',
-    fontSize: '46px',
-    
-    verticalAlign: 'middle',
-    lineHeight: 'normal',
 }
 
 export default Navigation;

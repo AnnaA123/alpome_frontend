@@ -8,6 +8,7 @@ const getAllData = () => {
     })
 }
 
+// originally used for UnitContent.js, unfortunately quite unreliable
 const getDayData = (date) => {
     return fetch(apiUrl + '/datetime/' + date).then(response => {
         return response.json();;

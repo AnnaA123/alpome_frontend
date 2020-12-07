@@ -4,7 +4,7 @@ import CheckTemp from './CheckData';
 import LineChart from './LineChart';
 import { graphDataType } from '../util/globals';
 import { getSingleUnit } from '../util/GrowingUnitsAPI';
-import { getDayData, getAllData } from '../util/supragardenAPI';
+import { getAllData } from '../util/supragardenAPI';
 import styles from './mystyle.module.css'; 
 
 // shows data for any prop sent through UnitContent.js -> Temperature.js -> here (despite name. this was planned badly)
@@ -29,13 +29,10 @@ import styles from './mystyle.module.css';
         }
         this.getUnit = this.getUnit.bind(this);
         this.getType = this.getType.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        
     }
 
     //gets unit info from the alpome db
     getUnit(id) {
-        console.log('props.unitid: ' + id);
         getSingleUnit(id).then(unit => {
             this.setState({
               unit
@@ -52,7 +49,6 @@ import styles from './mystyle.module.css';
 
      //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
      getSupragarden() {
-
         /* note to other devs: check the supragarden API. 
         it suddenly isn't giving daily data anymore, causing the app to crash
         
@@ -65,9 +61,8 @@ import styles from './mystyle.module.css';
                    loading: false,
                });
             } else {
-                console.log('something is not working');
+                console.log('Error: Could not retrieve data');
             }
-            
         });
     }
 
@@ -136,6 +131,7 @@ import styles from './mystyle.module.css';
         }
     }
 
+    // get the corresponding graph from LineChart.js
     setGraphView = () => {
         const type = this.state.type;
         if(type === 'temp') {
@@ -151,30 +147,14 @@ import styles from './mystyle.module.css';
         }
     }
 
-    //test
-    handleClick(event) {
-        event.preventDefault();
-
-        
-        console.log('täälä propsit: ' + JSON.stringify(this.props.location.propperinos.type));
-        console.log('ja täälä statet: ' + this.state.type);
-        console.log('title and thing ' + this.state.title + this.state.xyz);
-        console.log('here is the type in caps: ' + this.setGraphView());
-
-    }
-
      componentDidMount() {
-         // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          const unitId = this.getUnitId();
-
          this.getUnit(unitId);
          this.getSupragarden();
          this.getType();
          this.setDetails();
          getAllData().then((data) => this.setState({ readings: data }));
      }
-
-     // TEST BUTTON: <button onClick={this.handleClick}>test</button>
 
     render () {
         if(this.state.loading) {
@@ -206,9 +186,7 @@ import styles from './mystyle.module.css';
         
                         <div className="chart" >
                         <LineChart graphReadings={this.state.readings} parameter={graphDataType[this.setGraphView()]}/>
-                    </div>
-    </div>
-        
+                    </div></div>
                 </div>
             )
         }

@@ -3,12 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { deleteUnit } from '../util/GrowingUnitsAPI';
 import styles from './mystyle.module.css'; 
 
-
 /*deletes the unit
-
 used in UnitContent*/
  class DeleteUnit extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -17,7 +14,6 @@ used in UnitContent*/
 
         this.popUpDel = this.popUpDel.bind(this);
         this.delUnit = this.delUnit.bind(this);
-        
     }
 
     // toggles message view
@@ -39,16 +35,13 @@ used in UnitContent*/
      // del button (opens message)
      popUpDel = (event) => {
         event.preventDefault();
-
         this.toggleDelMsg();
      }
 
      //deletes the unit from backend
      delUnit = (event) => {
         event.preventDefault();
-
         const unitId = this.props.unitid;
-        console.log('props working: ' + unitId);
 
         deleteUnit('bearer ' + localStorage.getItem('token'), unitId).then(unit => {
             console.log('unit deleted: ' + unit)
@@ -59,7 +52,6 @@ used in UnitContent*/
             }
         })
      }
-
 
     render (){
         return <div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import styles from './mystyle.module.css'; 
 import { getSingleUnit, updateData, uploadImg } from '../util/GrowingUnitsAPI';
-import { getAllData, getDayData } from '../util/supragardenAPI';
+import { getAllData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
 import ShowImage from './ShowImage';
 import CheckWatered from './CheckWatered';
@@ -10,9 +10,7 @@ import DeleteUnit from './DeleteUnit';
 
 /* the content for Unitview.js 
 NOTE: minmax values are currently hardcoded into the state, and are sent through props to StatsTemp */
-
  class UnitContent extends React.Component{
-
     fr = new FileReader();
 
     constructor(props) {
@@ -58,8 +56,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                 },
             }
         }
-        
-        this.handleClick = this.handleClick.bind(this);
         this.handleTimeUpdate = this.handleTimeUpdate.bind(this);
         this.topImg = this.topImg.bind(this);
         this.handleImgSubmit = this.handleImgSubmit.bind(this);
@@ -69,7 +65,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         this.saveNotes = this.saveNotes.bind(this);
         this.showImages = this.showImages.bind(this);
     }
-
 
     //gets unit info from the alpome db and saves it to the state
     getUnit(id) {
@@ -99,8 +94,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                 last_watered: this.getNow(),
             },
         }));
-        console.log('setTheLw: ' + JSON.stringify(this.state.unit));
-        console.log('getttnowww: ' + this.getNow())
         return this.state.unit;
     }
 
@@ -108,8 +101,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         const minutes = 1000 * 60;
         const hours = minutes * 60;
         const days = hours * 24;
-        const weeks = days * 7;
-        const years = days * 365;
 
         //test:  const lwm = this.getNow() - 1606145477788;
         const lwm = this.getNow() - this.state.unit.last_watered;
@@ -121,7 +112,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     // for updating last_watered
     handleTimeUpdate = (event) => {
         event.preventDefault();
-
         this.setTheLw();
 
         const unit = {
@@ -138,16 +128,11 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             "unit_id": this.state.unit.unit_id,
             "notes": this.state.unit.notes
         }
-        //const unit = {...this.state.unit};
         const unitId = this.getUnitId();
-
-        console.log('unitId: ' + unitId);
         
         updateData(unit, 'bearer ' + localStorage.getItem('token'), unitId).then(unit => {
             if (unit.error !== undefined) {
-                console.log( '(UnitContent.js) Error message: ' + unit.error)
-            } else {
-                console.log( 'It worked.' )
+                console.log(unit.error)
             }
         })
     }
@@ -165,6 +150,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
          /* note to other devs: check the supragarden API. 
          it suddenly isn't giving daily data anymore, causing the app to crash
+         use all data instead
          
          getDayData(this.getToday()) */
          
@@ -175,9 +161,8 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                     loading: false,
                 });
              } else {
-                 console.log('something is not working');
+                 console.log('Failed to retrieve data');
              }
-             
          });
      }
      
@@ -192,69 +177,46 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     // adds image to state
     handleImgSubmit = (event) => {
         event.persist();
-        console.log('tried to add img' + event.target.files[0]);
-
         this.fr.readAsDataURL(event.target.files[0]);
-
-        let imgData = event.target.files[0];
-        /*const formData = new FormData();
-        formData.append('file', imgData);*/
-
-        console.log('event target ' + imgData);
-        //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         this.setState((prevState) => ({
             ...prevState,
             image: event.target.files[0]
         }));
-
-        // URL.createObjectURL()
-        console.log('here we are ' + JSON.stringify(this.state.image));
     }
 
     //posts image to unit at GrowingUnitsAPI.js
     handleImgSend = (event) => {
         event.preventDefault();
-        console.log('here we are ' + this.state.image);
         const unitId = this.getUnitId();
 
         const formData = new FormData();
         formData.append('image', this.state.image);
-        
 
-        uploadImg(formData, 'bearer ' + localStorage.getItem('token'), unitId).then(image => {
-            console.log('UnitContent img upload msg: ' + image);
-            if (image !== undefined) {
-                console.log( '(UnitContent.js) Error message: ' + image)
-            } else {
-                console.log( 'Image uploaded. ' + image );
-                window.location.reload();
-            }
+        uploadImg(formData, 'bearer ' + localStorage.getItem('token'), unitId).then(() => {
+            window.location.reload();
         })
     }
 
-    // photos at the bottom of the screen
+    // small imgs at the bottom of the screen
     showImages = (unit) => {
         const imgArr = unit.images;
         const revImgArr = imgArr.reverse();
-
         // first reverse the order of the images to show the most recent one at the top
 
         if (unit.images[0] !== undefined) {
             return revImgArr.map(img => {
-                return <div key={img.key}>
-                    <ShowImage image={img} unitid={this.getUnitId()}> </ShowImage>
+                return <div key={img.Key}>
+                    <ShowImage image={img} unitid={this.getUnitId()} />
                 </div>
             })
         }
     }
 
-
     // the image at the top of the page
     topImg = (imgList) => {
         if (imgList[0] !== undefined){
-            return <div >
-                <img src={imgList[imgList.length - 1].image_url} alt='No image' className={ styles.bigImg } />
-                
+            return <div>
+                <img src={imgList[imgList.length - 1].image_url} alt='Garden' className={ styles.bigImg } />
             </div>
         } else {
             return <div className={ styles.bigImg }>
@@ -275,6 +237,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                 <h3>Notes</h3>
                 <textarea 
                     type="text" 
+                    maxlength="200"
                     className={ styles.editStyle } 
                     value={this.state.unit.notes}
                     onChange={this.editingNotes}
@@ -292,13 +255,11 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
     handleEdit = (event) => {
         event.preventDefault();
-
         this.setState({editingNotes: !this.state.editingNotes})
     }
 
     editingNotes = (event) => {
         event.preventDefault();
-
         const val = event.target.value;
 
         this.setState((prevState) => ({
@@ -311,18 +272,13 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
     saveNotes = (event) => {
         event.preventDefault();
-
         const unit = {...this.state.unit};
         const unitId = this.getUnitId();
         this.setState({editingNotes: !this.state.editingNotes});
         
         updateData(unit, 'bearer ' + localStorage.getItem('token'), unitId).then(unit => {
-            console.log('msg from UnitContent: ' + JSON.stringify(unit));
-            console.log(' this is the state ' + JSON.stringify(this.state.unit));
             if (unit.error !== undefined) {
-                console.log( '(UnitContent.js) Error message: ' + unit.error)
-            } else {
-                console.log( 'It worked.' )
+                console.log(unit.error)
             }
         })
     }
@@ -332,32 +288,11 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         return num.toFixed(1);
     }
 
-     //test
-     handleClick(event) {
-        event.preventDefault();
-/*
-        this.getToday().then(today => {
-            console.log('does this even work lol' + today)
-        })
-*/
-        console.log('window.location.href ' + window.location.href);
-        console.log('HERE ARE THE CURRENT PROPS ' + JSON.stringify(this.props));
-        console.log('AND HERE IS THE ID ' + JSON.stringify(this.props.match.params.unitid));
-        console.log('image url: ' + JSON.stringify(this.state.unit.images));
-        console.log('garden info: ' + JSON.stringify(this.state.data));
-        console.log('UNIT STATE: ' + JSON.stringify(this.state.unit));
-        console.log('LASTAWATEREEEED: ' + this.state.last_w);
-        console.log('right now: ' + this.getNow());
-    }
-
     componentDidMount() {
         const unitId = this.getUnitId();
-        
         this.getUnit(unitId)
         this.getSupragarden();
     }
-
-    // TEST BUTTON: <button onClick={this.handleClick}>test</button>
 
     render () {
         if (this.state.unit.supragarden === true) {
@@ -379,7 +314,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                             <div className={ styles.boxstyle3 }>
                                 <CheckTemp current={this.state.data.temp} 
                                 min={this.state.minmax.temp.min} low={this.state.minmax.temp.low} high={this.state.minmax.temp.high} max={this.state.minmax.temp.max} />
-                                
                                     <div>
                                         <p>Temperature</p>
                                         <p className={ styles.smallText }>{this.rounder(this.state.data.temp)} °C</p>
@@ -447,7 +381,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                             <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
                             <button className={ styles.smallButtonStyle }>Add image</button>
                         </form>
-
                         <div className={ styles.picStyle }>
                             {this.showImages(this.state.unit)}
                         </div>
@@ -473,11 +406,9 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                         <div>
                             <p className={ styles.smallText }>Your garden was last watered {this.lastWatered()} days ago. </p>
                             <button onClick={this.handleTimeUpdate} className={ styles.smallButtonStyle }>Plants watered!</button>
-                            
                         </div>
                     </div>
                     <div className={ styles.boxstyle3 }>
-                        
                         {this.editNotes()}
                     </div>
 
@@ -485,13 +416,10 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                         <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
                         <button className={ styles.smallButtonStyle }>Add image</button>
                     </form>
-
                     <div className={ styles.picStyle }>
                         {this.showImages(this.state.unit)}
                     </div>
-
                     <DeleteUnit unitid={this.getUnitId()} />
-                    
                 </div>
             )
         }}

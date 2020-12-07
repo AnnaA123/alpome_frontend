@@ -5,9 +5,6 @@ import styles from './mystyle.module.css';
 
 /* for adding a new unit
 used in Addnew.js*/
-
-/* NOTE: THIS IS STILL IN UNDER CONSTRUCTION BCS BACKEND ISNT GETTING CORRECT INFO FOR SOME REASON */
-
 class AddUnit extends React.Component{
     constructor(props) {
         super(props);
@@ -36,7 +33,6 @@ class AddUnit extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.handleClickT = this.handleClickT.bind(this);
         this.handleClickF = this.handleClickF.bind(this);
-        this.handleTest = this.handleTest.bind(this);
     }
     
     handleChange = (event) => {   
@@ -80,7 +76,7 @@ class AddUnit extends React.Component{
         
     }
 
-    // watering frequency shenanigans
+    // watering frequency calculator
     wateringFreqCalc = () => {
         let wfms = 0;
 
@@ -131,6 +127,7 @@ class AddUnit extends React.Component{
         }
     }
     
+    // watering frequency dropdown menus
     onNumSelect = (event) => {
         event.preventDefault();
         this.setState({
@@ -147,8 +144,6 @@ class AddUnit extends React.Component{
         },
         this.wateringFreqCalc
         );
-
-        
     }
 
     // set supragarden as true button
@@ -162,32 +157,13 @@ class AddUnit extends React.Component{
         event.preventDefault();
         this.toggleFormF(this.state.formToggler);
     }
-
-    //test
-    handleTest(event) {
-        event.preventDefault();
-
-        this.wateringFreqCalc();
-        console.log('heres the numbers (from addunit): ' + JSON.stringify(this.state.unit));
-
-    }
-
-    /* 
-    this.wateringFreqCalc();
-        console.log('pls work: ' + JSON.stringify(this.state.unit));
-    */
-
-    // submit the whole form
+    
+    // create the unit in backend
     handleSubmit = (event) => {
         event.preventDefault();
-
         const unit = {...this.state.unit};
-        
-        console.log('here it is: ' + this.state.unit.watering_frequency);
 
         addNewUnit(unit, localStorage.getItem('token')).then(unit => {
-            console.log('msg from AddUnit: ' + JSON.stringify(unit));
-            console.log(' here is the state ' + JSON.stringify(this.state.unit));
             if (unit.error !== undefined) {
                 this.setState({ errorMessage: 'Cannot add unit.' })
             } else {
@@ -195,24 +171,23 @@ class AddUnit extends React.Component{
             }
         })
     }
-
-    /* the if/else statement changes input and state depending on whether the unit is connected to a 
-    supragarden or not supragarden has a data source while a normal unit has watering frequency*/
-
-    /* 
-button for easily turning the unit into supragarden monitor. 
+    
+/* button for easily turning the unit into supragarden monitor:
 if included: add to the right above the watering frequency selectors.
 for if(formToggler) make sure to add a datasource input 
 (datasource has not been properly configured due to issues with the supragarden api)
+
     <label>
         <button onClick={this.handleClickT} className={styles.choiceButtonStyle}>
             <ion-icon name="radio-button-off-outline"></ion-icon>
         </button>
         Is it a hydroponic system?
     </label>
-    
-    TEST BUTTON: <button onClick={this.handleClick}>test</button> */
+*/
 
+/* the if/else statement changes input and state depending on whether the unit is connected to a 
+    supragarden or not.
+    supragarden has a data source while a normal garden has watering frequency*/
     render () {
         if (this.state.formToggler === true) { 
             return <div className={styles.fullFormStyle}>
@@ -221,16 +196,17 @@ for if(formToggler) make sure to add a datasource input
                 <label>Nickname</label>
                 <input 
                     type="text" 
+                    maxLength="20"
                     value={this.state.nickname}
                     onChange={this.handleChange} 
                     name="nickname"/>
                 <label>Location</label>
                 <input 
                     type="text" 
+                    maxLength="20"
                     value={this.state.location}
                     onChange={this.handleChange} 
                     name="location"/>
-                
                 
                 <label>
                     <button onClick={this.handleClickF} className={styles.choiceButtonStyle}><ion-icon name="radio-button-on-outline" ></ion-icon></button>
@@ -249,12 +225,14 @@ for if(formToggler) make sure to add a datasource input
                 <label>Nickname</label>
                 <input 
                     type="text" 
+                    maxLength="20"
                     value={this.state.nickname}
                     onChange={this.handleChange} 
                     name="nickname"/>
                 <label>Location</label>
                 <input 
                     type="text" 
+                    maxLength="20"
                     value={this.state.location}
                     onChange={this.handleChange} 
                     name="location"/>
@@ -287,11 +265,7 @@ for if(formToggler) make sure to add a datasource input
             </form>
             </div>
         }
-        
-
-        
     }
-    
 }
 
 export default withRouter(AddUnit);
