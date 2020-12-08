@@ -23,6 +23,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             image: '',
             loading: true,
             shortLoading: true,
+            ownerUser: true,
             minmax: {
                 temp: {
                     min: '10',
@@ -66,6 +67,22 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         this.showImages = this.showImages.bind(this);
     }
 
+    // checks if the current user is the owner
+    checkUser = (owner) => {
+        if (localStorage.getItem('currentUser') == owner) {
+            this.setState({
+                ownerUser: true
+            })
+        } else {
+            this.setState({
+                ownerUser: false
+            })
+        }
+
+        console.log('user in localstorage: ' + localStorage.getItem('currentUser'))
+        console.log('user in state: ' + this.state.unit.owner)
+    }
+
     //gets unit info from the alpome db and saves it to the state
     getUnit(id) {
         getSingleUnit(id).then(unit => {
@@ -73,8 +90,10 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
               unit,
               last_w: unit.last_watered,
               shortLoading: false,
-            },
-            );
+            }, 
+            console.log('owner: ' + unit.owner.user_id),
+            this.checkUser(unit.owner.user_id)
+            )
           });
      }
 
@@ -113,6 +132,8 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     handleTimeUpdate = (event) => {
         event.preventDefault();
         this.setTheLw();
+
+        console.log('current user is owner: ' + this.state.ownerUser)
 
         const unit = {
             "common_names": this.state.unit.common_names,
@@ -214,41 +235,89 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
     // the image at the top of the page
     topImg = (imgList) => {
-        if (imgList[0] !== undefined){
-            return <div>
-                <img src={imgList[imgList.length - 1].image_url} alt='Garden' className={ styles.bigImg } />
+        if (this.state.ownerUser) {
+            if (imgList[0] !== undefined){
+                return <div>
+                    <img src={imgList[imgList.length - 1].image_url} alt='Garden' className={ styles.bigImg } />
+                </div>
+            } else {
+                return <div className={ styles.bigImg }>
+                    <p className={ styles.centerText }></p>
+                    <form onSubmit={this.handleImgSend}>
+                        <input type="file" name="plantimg" onChange={this.handleImgSubmit} />
+                        <p>{'\n'}</p>
+                        <button className={ styles.smallButtonStyle }>Add image</button>
+                    </form>
+                </div>
+            }
+        } else {
+            if (imgList[0] !== undefined){
+                return <div>
+                    <img src={imgList[imgList.length - 1].image_url} alt='Garden' className={ styles.bigImg } />
+                </div>
+            } else {
+                return <div className={ styles.bigImg }>
+                    <p className={ styles.centerText }>No image</p>
+                </div>
+            }
+        }
+    }
+
+    uploadImage = () => {
+        if (this.state.ownerUser) {
+            return <form onSubmit={this.handleImgSend} >
+                <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
+                <button className={ styles.smallButtonStyle }>Add image</button>
+            </form>
+        }
+    }
+
+    // shows when the garden was last watered (in days)
+    lastWateredNote = () => {
+        if (this.state.ownerUser) {
+            return <div className={ styles.boxstyle3 }>
+                <CheckWatered w_freq={this.state.unit.watering_frequency} today={this.getNow()} last_watered={this.state.unit.last_watered}/>
+                <div>
+                    <p className={ styles.smallText }>Your garden was last watered {this.lastWatered()} days ago. </p>
+                    <button onClick={this.handleTimeUpdate} className={ styles.smallButtonStyle }>Plants watered!</button>
+                </div>
             </div>
         } else {
-            return <div className={ styles.bigImg }>
-                <p className={ styles.centerText }></p>
-                <form onSubmit={this.handleImgSend}>
-                    <input type="file" name="plantimg" onChange={this.handleImgSubmit} />
-                    <p>{'\n'}</p>
-                    <button className={ styles.smallButtonStyle }>Add image</button>
-                </form>
+            return <div className={ styles.boxstyle3 }>
+                <CheckWatered w_freq={this.state.unit.watering_frequency} today={this.getNow()} last_watered={this.state.unit.last_watered}/>
+                <div>
+                    <p className={ styles.smallText }>Your garden was last watered {this.lastWatered()} days ago. </p>
+                </div>
             </div>
         }
     }
 
     // updating and viewing the notes
     editNotes() {
-        if (this.state.editingNotes) {
-            return <div><form onSubmit={this.saveNotes}>
-                <h3>Notes</h3>
-                <textarea 
-                    type="text" 
-                    maxlength="200"
-                    className={ styles.editStyle } 
-                    value={this.state.unit.notes}
-                    onChange={this.editingNotes}
-                ></textarea>
-                <button  className={ styles.smallButtonStyle }>Save</button>
-            </form></div>
+        if (this.state.ownerUser) {
+            if (this.state.editingNotes) {
+                return <div><form onSubmit={this.saveNotes}>
+                    <h3>Notes</h3>
+                    <textarea 
+                        type="text" 
+                        maxLength="200"
+                        className={ styles.editStyle } 
+                        value={this.state.unit.notes}
+                        onChange={this.editingNotes}
+                    ></textarea>
+                    <button  className={ styles.smallButtonStyle }>Save</button>
+                </form></div>
+            } else {
+                return <div>
+                    <h3>Notes</h3>
+                    <p className={ styles.smallText }>{this.state.unit.notes}</p>
+                    <button onClick={this.handleEdit} className={ styles.smallButtonStyle }>Edit</button>
+                    </div>
+            }
         } else {
             return <div>
                 <h3>Notes</h3>
                 <p className={ styles.smallText }>{this.state.unit.notes}</p>
-                <button onClick={this.handleEdit} className={ styles.smallButtonStyle }>Edit</button>
                 </div>
         }
     }
@@ -377,14 +446,11 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                             </div>
                         </Link>
 
-                        <form onSubmit={this.handleImgSend} >
-                            <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
-                            <button className={ styles.smallButtonStyle }>Add image</button>
-                        </form>
+                        {this.uploadImage()}
                         <div className={ styles.picStyle }>
                             {this.showImages(this.state.unit)}
                         </div>
-                        <DeleteUnit unitid={this.getUnitId()} />
+                        <DeleteUnit unitid={this.getUnitId()} owner={this.state.ownerUser}/>
                     </div>
                 )
             }
@@ -401,25 +467,16 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                 <div className={ styles.contain }>
                     <div >{this.topImg(this.state.unit.images)}</div>
                     <h1>{this.state.unit.nickname}</h1>
-                    <div className={ styles.boxstyle3 }>
-                        <CheckWatered w_freq={this.state.unit.watering_frequency} today={this.getNow()} last_watered={this.state.unit.last_watered}/>
-                        <div>
-                            <p className={ styles.smallText }>Your garden was last watered {this.lastWatered()} days ago. </p>
-                            <button onClick={this.handleTimeUpdate} className={ styles.smallButtonStyle }>Plants watered!</button>
-                        </div>
-                    </div>
+                    {this.lastWateredNote()}
                     <div className={ styles.boxstyle3 }>
                         {this.editNotes()}
                     </div>
 
-                    <form onSubmit={this.handleImgSend} >
-                        <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
-                        <button className={ styles.smallButtonStyle }>Add image</button>
-                    </form>
+                    {this.uploadImage()}
                     <div className={ styles.picStyle }>
                         {this.showImages(this.state.unit)}
                     </div>
-                    <DeleteUnit unitid={this.getUnitId()} />
+                    <DeleteUnit unitid={this.getUnitId()} owner={this.state.ownerUser} />
                 </div>
             )
         }}

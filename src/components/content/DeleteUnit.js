@@ -54,13 +54,17 @@ used in UnitContent*/
      }
 
     render (){
-        return <div>
-            {this.delMessage()}
-            <button className={styles.deleteButtonStyle} onClick={this.popUpDel}>
-                <p>Delete unit</p>
-                <ion-icon name="trash" className={ styles.iconStyle }></ion-icon> 
-            </button>
-        </div>
+        if (this.props.owner) {
+            return <div>
+                {this.delMessage()}
+                <button className={styles.deleteButtonStyle} onClick={this.popUpDel}>
+                    <p>Delete unit</p>
+                    <ion-icon name="trash" className={ styles.iconStyle }></ion-icon> 
+                </button>
+            </div>
+        } else {
+            return <div></div>
+        }
     }
 }
 
