@@ -6,6 +6,8 @@ After pulling/downloading:
   <li>npm i</li>
   <li>npm start</li>
  </ul>
+ 
+ Note that currently viewing Suprgarden data is only possible through specific users, who have 'supragarden' set as true in the db. In AddUnit.js is more information about how to connect to the specific monitoring system used as the source for this project. 
 
 ==========================================================================
 
