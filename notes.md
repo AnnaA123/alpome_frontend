@@ -1,6 +1,6 @@
 
 
-After pulling
+After pulling/downloading:
 
 <ul>
   <li>npm i</li>
