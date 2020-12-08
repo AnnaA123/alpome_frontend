@@ -1,16 +1,11 @@
 
 
-I used yarn as the package manager (while the backend uses npm), 
-but did not include any files using yarn, so downloading packages can be a bit of a hassle.
-
-The packages needed (for now) are:
+After pulling
 
 <ul>
-  <li>node_modules</li>
-  <li>react-router-dom</li>
-</ul>
-
-(I'll update later if any more are added)
+  <li>npm i</li>
+  <li>npm start</li>
+ </ul>
 
 ==========================================================================
 
