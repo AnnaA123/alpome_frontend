@@ -1,6 +1,5 @@
 Frontend for Alpome. Final product: https://alpome.herokuapp.com/ 
 
-
 Backend can be found at https://github.com/pokumars/alpome_backend
 
 Data collected from https://github.com/Yooru6/Urbanfarmlab/tree/main/MikrokosmosAPI
