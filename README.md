@@ -1,4 +1,4 @@
-Frontend for alpome app.
+Frontend for Alpome https://alpome.herokuapp.com/ \n
 Backend can be found at https://github.com/pokumars/alpome_backend
 
 
