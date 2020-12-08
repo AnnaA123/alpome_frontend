@@ -1,4 +1,6 @@
-Frontend for Alpome. Final product: https://alpome.herokuapp.com/ 
+Frontend for Alpome, an app done as part of an innovation course.
+
+Final product: https://alpome.herokuapp.com/ 
 
 Backend can be found at https://github.com/pokumars/alpome_backend
 
