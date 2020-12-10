@@ -266,7 +266,10 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     // button for opening message to upload image
     uploadImage = () => {
         if (this.state.ownerUser) {
-            return <button className={ styles.wideButtonStyle } onClick={this.toggleAddingImg}>Add image</button>
+            return <div className={styles.titleButton}>
+                <h3>Images</h3>
+                <button className={ styles.wideButtonStyle } onClick={this.toggleAddingImg}>Add image</button>
+            </div>
         }
     }
 
