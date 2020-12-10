@@ -6,6 +6,7 @@ import { getAllData } from '../util/supragardenAPI';
 import CheckTemp from './CheckData';
 import ShowImage from './ShowImage';
 import CheckWatered from './CheckWatered';
+import CurrentTime from './CurrentTime';
 import DeleteUnit from './DeleteUnit';
 
 /* the content for Unitview.js 
@@ -24,6 +25,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             loading: true,
             shortLoading: true,
             ownerUser: true,
+            addingImg: false,
             minmax: {
                 temp: {
                     min: '10',
@@ -69,7 +71,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
     // checks if the current user is the owner
     checkUser = (owner) => {
-        if (localStorage.getItem('currentUser') == owner) {
+        if (localStorage.getItem('currentUser') === owner) {
             this.setState({
                 ownerUser: true
             })
@@ -78,9 +80,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                 ownerUser: false
             })
         }
-
-        console.log('user in localstorage: ' + localStorage.getItem('currentUser'))
-        console.log('user in state: ' + this.state.unit.owner)
     }
 
     //gets unit info from the alpome db and saves it to the state
@@ -91,17 +90,15 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
               last_w: unit.last_watered,
               shortLoading: false,
             }, 
-            console.log('owner: ' + unit.owner.user_id),
             this.checkUser(unit.owner.user_id)
             )
           });
      }
 
-     // date and time for last_watered
+     // date and time for last_watered in milliseconds
      getNow() {
         const timeNow = new Date();
         const dateNow = timeNow.getTime();
-
         return dateNow;
     }
 
@@ -110,7 +107,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         this.setState((prevState) => ({
             unit: {
                 ...prevState.unit,
-                last_watered: this.getNow(),
+                last_watered: CurrentTime(),
             },
         }));
         return this.state.unit;
@@ -122,7 +119,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         const days = hours * 24;
 
         //test:  const lwm = this.getNow() - 1606145477788;
-        const lwm = this.getNow() - this.state.unit.last_watered;
+        const lwm = CurrentTime() - this.state.unit.last_watered;
         const lwn = Math.round(lwm / days);
 
         return lwn;
@@ -133,15 +130,13 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         event.preventDefault();
         this.setTheLw();
 
-        console.log('current user is owner: ' + this.state.ownerUser)
-
         const unit = {
             "common_names": this.state.unit.common_names,
             "shared_access": this.state.unit.shared_access,
             "nickname": this.state.unit.nickname,
             "location": this.state.unit.location,
             "supragarden": this.state.unit.supragarden,
-            "last_watered": this.getNow(),
+            "last_watered": CurrentTime(),
             "watering_frequency": this.state.unit.watering_frequency,
             "data_source": this.state.unit.data_source,
             "owner": this.state.unit.owner,
@@ -241,12 +236,12 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                     <img src={imgList[imgList.length - 1].image_url} alt='Garden' className={ styles.bigImg } />
                 </div>
             } else {
-                return <div className={ styles.bigImg }>
-                    <p className={ styles.centerText }></p>
+                return <div className={ styles.noImgStyle }>
+                    <p className={ styles.centerText }>Add a picture of your garden!</p>
                     <form onSubmit={this.handleImgSend}>
                         <input type="file" name="plantimg" onChange={this.handleImgSubmit} />
                         <p>{'\n'}</p>
-                        <button className={ styles.smallButtonStyle }>Add image</button>
+                        <button className={ styles.smallButtonStyle }>Upload image</button>
                     </form>
                 </div>
             }
@@ -256,18 +251,31 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                     <img src={imgList[imgList.length - 1].image_url} alt='Garden' className={ styles.bigImg } />
                 </div>
             } else {
-                return <div className={ styles.bigImg }>
-                    <p className={ styles.centerText }>No image</p>
+                return <div className={ styles.noImgStyle } >
+                    <p style={{paddingTop: '80px'}}>No image</p>
                 </div>
             }
         }
     }
 
+    toggleAddingImg = (event) => {
+        event.preventDefault();
+        this.setState(prevState => ({ addingImg: !prevState.addingImg }));
+    }
+
+    // button for opening message to upload image
     uploadImage = () => {
         if (this.state.ownerUser) {
-            return <form onSubmit={this.handleImgSend} >
+            return <button className={ styles.wideButtonStyle } onClick={this.toggleAddingImg}>Add image</button>
+        }
+    }
+
+    // upload image msg
+    imgMessage = () => {
+        if(this.state.addingImg) {
+            return <form onSubmit={this.handleImgSend} className={styles.boxstyle2} >
                 <input type="file" name="plant_img" onChange={this.handleImgSubmit} />
-                <button className={ styles.smallButtonStyle }>Add image</button>
+                <button className={ styles.smallButtonStyle }>Upload image</button>
             </form>
         }
     }
@@ -276,7 +284,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     lastWateredNote = () => {
         if (this.state.ownerUser) {
             return <div className={ styles.boxstyle3 }>
-                <CheckWatered w_freq={this.state.unit.watering_frequency} today={this.getNow()} last_watered={this.state.unit.last_watered}/>
+                <CheckWatered w_freq={this.state.unit.watering_frequency} today={CurrentTime()} last_watered={this.state.unit.last_watered}/>
                 <div>
                     <p className={ styles.smallText }>Your garden was last watered {this.lastWatered()} days ago. </p>
                     <button onClick={this.handleTimeUpdate} className={ styles.smallButtonStyle }>Plants watered!</button>
@@ -284,9 +292,9 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
             </div>
         } else {
             return <div className={ styles.boxstyle3 }>
-                <CheckWatered w_freq={this.state.unit.watering_frequency} today={this.getNow()} last_watered={this.state.unit.last_watered}/>
+                <CheckWatered w_freq={this.state.unit.watering_frequency} today={CurrentTime()} last_watered={this.state.unit.last_watered}/>
                 <div>
-                    <p className={ styles.smallText }>Your garden was last watered {this.lastWatered()} days ago. </p>
+                    <p className={ styles.smallText }>This garden was last watered {this.lastWatered()} days ago. </p>
                 </div>
             </div>
         }
@@ -361,6 +369,12 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         const unitId = this.getUnitId();
         this.getUnit(unitId)
         this.getSupragarden();
+    }
+
+    componentWillUnmount() {
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render () {
@@ -447,6 +461,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                         </Link>
 
                         {this.uploadImage()}
+                        {this.imgMessage()}
                         <div className={ styles.picStyle }>
                             {this.showImages(this.state.unit)}
                         </div>
@@ -473,6 +488,7 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
                     </div>
 
                     {this.uploadImage()}
+                    {this.imgMessage()}
                     <div className={ styles.picStyle }>
                         {this.showImages(this.state.unit)}
                     </div>

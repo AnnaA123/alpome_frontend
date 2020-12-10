@@ -19,7 +19,7 @@ there is also an add units button*/
             <Link to='/addnew'>
                 <div className={ styles.boxstyle2 }>
                     
-                    <p>Add new unit +</p>
+                    <p>Add new garden +</p>
                 </div></Link>
             
             

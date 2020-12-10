@@ -68,7 +68,7 @@ class SignUpForm extends React.Component {
                         onChange={this.handleChange} />
                     <label>Email Address</label>
                     <input 
-                        type="text" 
+                        type="email" 
                         name="email"
                         maxLength="200"
                         value={this.state.email} 

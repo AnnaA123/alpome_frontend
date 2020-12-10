@@ -44,7 +44,6 @@ used in UnitContent*/
         const unitId = this.props.unitid;
 
         deleteUnit('bearer ' + localStorage.getItem('token'), unitId).then(unit => {
-            console.log('unit deleted: ' + unit)
             if (unit.error !== undefined) {
                 this.setState({ errorMessage: 'Could not delete unit' })
             } else {
@@ -58,7 +57,7 @@ used in UnitContent*/
             return <div>
                 {this.delMessage()}
                 <button className={styles.deleteButtonStyle} onClick={this.popUpDel}>
-                    <p>Delete unit</p>
+                    <p>Delete garden</p>
                     <ion-icon name="trash" className={ styles.iconStyle }></ion-icon> 
                 </button>
             </div>

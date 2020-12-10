@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { addNewUnit } from '../util/GrowingUnitsAPI';
+import { addNewUnit, updateData } from '../util/GrowingUnitsAPI';
+import CurrentTime from './CurrentTime';
 import styles from './mystyle.module.css'; 
 
 /* for adding a new unit
@@ -14,7 +15,7 @@ class AddUnit extends React.Component{
                 common_names: [],
                 location: '',
                 supragarden: false,
-                last_watered: null,
+                last_watered: CurrentTime(),
                 watering_frequency: 3600000,
                 data_source: null,
                 owner: localStorage.getItem('currentUser'),
@@ -35,8 +36,8 @@ class AddUnit extends React.Component{
         this.handleClickF = this.handleClickF.bind(this);
     }
     
+    // input values to state
     handleChange = (event) => {   
-
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -59,7 +60,6 @@ class AddUnit extends React.Component{
             },
             formToggler: !previous,
         }));
-        
     }
 
     // set supragarden as false and set the watering frequency
@@ -73,7 +73,6 @@ class AddUnit extends React.Component{
         }));
 
         this.wateringFreqCalc();
-        
     }
 
     // watering frequency calculator
@@ -191,7 +190,7 @@ for if(formToggler) make sure to add a datasource input
     render () {
         if (this.state.formToggler === true) { 
             return <div className={styles.fullFormStyle}>
-            <h1>Add New Unit</h1>
+            <h1>Add New Garden</h1>
             <form onSubmit={this.handleSubmit}>
                 <label>Nickname</label>
                 <input 
@@ -220,7 +219,7 @@ for if(formToggler) make sure to add a datasource input
             </div>
         } else {
             return <div className={styles.fullFormStyle}>
-            <h1>Add New Unit</h1>
+            <h1>Add New Garden</h1>
             <form onSubmit={this.handleSubmit}>
                 <label>Nickname</label>
                 <input 
@@ -237,7 +236,8 @@ for if(formToggler) make sure to add a datasource input
                     onChange={this.handleChange} 
                     name="location"/>
 
-                <label>Watering Frequency</label>
+                <label>How often do you want to water it?</label>
+                <label>Once every</label>
                 <select value={this.state.wfDdNum} onChange={this.onNumSelect} className={styles.dropDownStyle}>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -253,10 +253,10 @@ for if(formToggler) make sure to add a datasource input
                     <option value="12">12</option>
                 </select>
                 <select value={this.state.wfDdVal} onChange={this.onValSelect} className={styles.dropDownStyle}>
-                    <option value="hours">Hours</option>
-                    <option value="days">Days</option>
-                    <option value="weeks">Weeks</option>
-                    <option value="months">Months</option>
+                    <option value="hours">Hour(s)</option>
+                    <option value="days">Day(s)</option>
+                    <option value="weeks">Week(s)</option>
+                    <option value="months">Month(s)</option>
                 </select>
                 
                 <p className={styles.errorText}>{this.state.errorMessage}</p>
