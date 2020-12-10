@@ -153,7 +153,8 @@
   border: none;
   color: #fff;
   width: 100%;
-  padding: 6px 16px;
+  padding: 8px 16px;
+  margin-top: 10px;
   font-size: 12px;
   text-decoration: none;
   display: inline-block;
