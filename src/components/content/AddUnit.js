@@ -192,14 +192,14 @@ for if(formToggler) make sure to add a datasource input
             return <div className={styles.fullFormStyle}>
             <h1>Add New Garden</h1>
             <form onSubmit={this.handleSubmit}>
-                <label>Nickname</label>
+                <label>Nickname of your garden</label>
                 <input 
                     type="text" 
                     maxLength="20"
                     value={this.state.nickname}
                     onChange={this.handleChange} 
                     name="nickname"/>
-                <label>Location</label>
+                <label>Location of your garden</label>
                 <input 
                     type="text" 
                     maxLength="20"
@@ -214,21 +214,21 @@ for if(formToggler) make sure to add a datasource input
                 
                 <p className={styles.errorText}>{this.state.errorMessage}</p>
                 <p>{'\n'}</p>
-                <button type="submit" className={styles.buttonStyle}>Add Unit</button>
+                <button type="submit" className={styles.buttonStyle}>Add Garden</button>
             </form>
             </div>
         } else {
             return <div className={styles.fullFormStyle}>
             <h1>Add New Garden</h1>
             <form onSubmit={this.handleSubmit}>
-                <label>Nickname</label>
+                <label>Nickname of your garden</label>
                 <input 
                     type="text" 
                     maxLength="20"
                     value={this.state.nickname}
                     onChange={this.handleChange} 
                     name="nickname"/>
-                <label>Location</label>
+                <label>Location of your garden</label>
                 <input 
                     type="text" 
                     maxLength="20"
@@ -261,7 +261,7 @@ for if(formToggler) make sure to add a datasource input
                 
                 <p className={styles.errorText}>{this.state.errorMessage}</p>
                 <p>{'\n'}</p>
-                <button type="submit" className={styles.buttonStyle}>Add Unit</button>
+                <button type="submit" className={styles.buttonStyle}>Add Garden</button>
             </form>
             </div>
         }
