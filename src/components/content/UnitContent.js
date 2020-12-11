@@ -160,9 +160,11 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
         return dateNow;
     }
 
-     //get current data for the supragarden unit from Urbanlabfarm API
+     //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
      getSupragarden() {
-      /* note to other devs: check the supragarden API. 
+         // this suddenly isnt working :^)
+
+         /* note to other devs: check the supragarden API. 
          it suddenly isn't giving daily data anymore, causing the app to crash
          use all data instead
          
@@ -214,7 +216,8 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
     // small imgs at the bottom of the screen
     showImages = (unit) => {
         const imgArr = unit.images;
-        const revImgArr = imgArr.reverse();
+        const newImgArr = imgArr.slice();
+        const revImgArr = newImgArr.reverse();
         // first reverse the order of the images to show the most recent one at the top
 
         if (unit.images[0] !== undefined) {
