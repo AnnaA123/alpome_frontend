@@ -28,5 +28,5 @@ API requests. The apiURL is at the top of the page.
 
 src/Views
 --------------------------
-Views for each page.
+Views for each page. Includes the main component, header and a token check.
 
