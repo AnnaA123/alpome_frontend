@@ -162,8 +162,6 @@ NOTE: minmax values are currently hardcoded into the state, and are sent through
 
      //get current data for the supragarden unit from https://us-central1-amiable-hydra-279814.cloudfunctions.net/app/api/read
      getSupragarden() {
-         // this suddenly isnt working :^)
-
          /* note to other devs: check the supragarden API. 
          it suddenly isn't giving daily data anymore, causing the app to crash
          use all data instead
