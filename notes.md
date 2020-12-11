@@ -24,7 +24,7 @@ The header and navigation menu.
 
 src/components/util
 ----------------------
-API requests to the backend(s). The apiURL is at the top of the page.
+API requests. The apiURL is at the top of the page.
 
 src/Views
 --------------------------
